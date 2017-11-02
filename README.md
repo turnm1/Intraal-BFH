@@ -1,2 +1,2 @@
-# Intraal-BFH
+# Intraal-Bachelor Thesis
 Bachelor-Thesis code
