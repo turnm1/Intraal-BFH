@@ -3,9 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/remote/IntraalBT.java</file>
-            <file>file:/C:/Users/Turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/remote/runPassage.java</file>
-            <file>file:/C:/Users/Turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/remote/runMotion.java</file>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/config/connection/rest/DeviceRestService.java</file>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/config/connection/rest/Device.java</file>
         </group>
     </open-files>
 </project-private>

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package intraal.bt.remote;
+package intraal.bt.local.test;
 
 import intraal.bt.sensor.room.bad.badMotion;
 import intraal.bt.sensor.room.eingang.eingangMotion;
