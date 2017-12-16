@@ -3,8 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/config/connection/ConnectionParameters.java</file>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/sensor/room/schlafzimmer/schlafzimmerMotion.java</file>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/algo/uc1/OnePersonLokation.java</file>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/test/intraal/bt/local/test/SubData.java</file>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/test/intraal/bt/local/test/runMotion.java</file>
             <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/config/connection/rest/DeviceRestService.java</file>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/algo/uc1/OnePersonLokation2.java</file>
             <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/config/connection/rest/Device.java</file>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/test/intraal/bt/local/test/runPassage.java</file>
         </group>
     </open-files>
 </project-private>

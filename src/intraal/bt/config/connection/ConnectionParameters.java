@@ -32,9 +32,9 @@ public class ConnectionParameters {
     /*
     SIOT Dashboard connection
     */
-   // public final String USER_AGENT = "Mozilla/5.0";
-   // public final String URL = "https://siot.net:12955";
-   // public final String Licence = "3DC9-90D5-8150-44DA-32FE-D81F-310D-5614";
+    public final String USER_AGENT = "Mozilla/5.0";
+    public final String URL = "https://siot.net:12955";
+    public final String Licence = "3DC9-90D5-8150-44DA-32FE-D81F-310D-5614";
     
     /*
     SIOT Input Key's
@@ -81,7 +81,7 @@ public class ConnectionParameters {
     public final int tgPort = 4223;
     public final String tgEingangIP = "10.0.233.43";
     public final String tgKücheIP = "10.0.233.44";  //BFH Orginal IP: 10.0.233.44 //// HDI IP: 192.168.0.181 ******************************************************************************
-    public final String tgBadIP = "192.168.8.110";    //BFH Orginal IP: 10.0.233.45 //// HDI IP: 192.168.0.106 or 10.0.0.52 or localhost ******************************************************************************
+    public final String tgBadIP = "10.0.233.45";    //BFH Orginal IP: 10.0.233.45 //// HDI IP: 192.168.0.106 or 10.0.0.52 or localhost ******************************************************************************
     public final String tgSchlafzimmerIP = "10.0.233.46";
     public final String tgWohnzimmerIP = "10.0.233.47";
     public final String tgBettIP = "10.0.233.48";
@@ -159,24 +159,24 @@ public class ConnectionParameters {
     */
 
     // INPUT
-//    public String getSIOTUSER_AGENT() {
-//        return USER_AGENT;
-//    }
-//
-//    public String getSIOTURL() {
-//        return URL;
-//    }
-//
-//    public String getSIOTLicence() {
-//        return Licence;
-//    }
-//    
-//    // OUTPUT
-//     public String getMessageOnOff() {
-//        // https://siot.net:12935/getdata?centerUID=A751-6354-E157-4A05-BDAB-77BB-35E5-2657&sensorUID=65206DBD5B5B465EACBE8BFD8DE92285
-//        String onOff = URL+"/getdata?centerUID="+Licence+"&sensorUID="+service_message_onOff;
-//        return onOff;
-//    }
+    public String getSIOTUSER_AGENT() {
+        return USER_AGENT;
+    }
+
+    public String getSIOTURL() {
+        return URL;
+    }
+
+    public String getSIOTLicence() {
+        return Licence;
+    }
+    
+    // OUTPUT
+     public String getMessageOnOff() {
+        // https://siot.net:12935/getdata?centerUID=A751-6354-E157-4A05-BDAB-77BB-35E5-2657&sensorUID=65206DBD5B5B465EACBE8BFD8DE92285
+        String onOff = URL+"/getdata?centerUID="+Licence+"&sensorUID="+service_message_onOff;
+        return onOff;
+    }
     
     /*
     SIOT Key getter's

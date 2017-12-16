@@ -8,9 +8,12 @@ package intraal.bt.sensor.room.schlafzimmer;
 import com.tinkerforge.BrickletMotionDetector;
 import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
+import intraal.bt.config.connection.siot.SiotDashboardInput;
 import intraal.bt.config.mqtt.MQTTCommunication;
 import intraal.bt.config.mqtt.MQTTParameters;
 import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -27,6 +30,8 @@ public class schlafzimmerMotion implements MqttCallback {
     MqttMessage message;
     MQTTParameters p;
     MQTTCommunication c;
+    SiotDashboardInput sdi = new SiotDashboardInput();
+
 
     /////////////////// EDIT HERE ///////////////////////
     private final String UID = "wt9";
@@ -82,6 +87,16 @@ Motionsensor
             message.setQos(0);
             c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
             System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+            
+            sdi.setInputKey(con.getAl_inputKey_bad());       // inputKey
+            sdi.setInputMessage(message.toString());
+            try {
+                sdi.sendInput();
+            } catch (Exception ex) {
+                System.out.print("Fehler");
+                Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         });
         // Add detection cycle ended listener
         tinkerforg.addDetectionCycleEndedListener(() -> {
@@ -90,6 +105,16 @@ Motionsensor
             message.setQos(0);
             c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
             System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+            
+            sdi.setInputKey(con.getAl_inputKey_bad());       // inputKey
+            sdi.setInputMessage(message.toString());
+            try {
+                sdi.sendInput();
+            } catch (Exception ex) {
+                System.out.print("Fehler");
+                Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         });
     }
 

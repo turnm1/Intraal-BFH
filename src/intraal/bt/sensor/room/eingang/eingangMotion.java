@@ -29,7 +29,7 @@ public class eingangMotion implements MqttCallback {
     MQTTCommunication c;
 
     /////////////////// EDIT HERE ///////////////////////
-    private final String UID = "Wtd";
+    private final String UID = "wtd";
     private final String ROOM = "Eingang";
     private final String MODUL = "Motion";
     /////////////////////////////////////////////////////

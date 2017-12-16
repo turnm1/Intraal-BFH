@@ -77,7 +77,7 @@ public class DeviceRestService {
     }
 
     public void putMethode(String methode) throws MalformedURLException, IOException {
-        URLConnection connection = new URL(webPage + "?" + methode).openConnection();
+        URLConnection connection = new URL(webPage + methode).openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");
         InputStream response = connection.getInputStream();
     }
@@ -85,13 +85,13 @@ public class DeviceRestService {
     public static void main(String[] args) throws IOException {
 
         DeviceRestService drs = new DeviceRestService();
-        //drs.checkConnection();
+        drs.checkConnection();
         Device d = new Device();
 
-//        String JSON = drs.getMethode("/api/Devices/5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
+//       String JSON = drs.getMethode("/api/Devices/5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
 //        d.parsJsonToObjetc(JSON);
 //        System.out.println(d.getValueDate()+" "+d.getName()+" "+d.getSerial());
-        drs.putMethode("/api/Devices/5b9b3fea-cc8d-45ad-92b3-9caf3be725bc?switchState=false");
+        drs.putMethode("/api/Devices/5b9b3fea-cc8d-45ad-92b3-9caf3be725bc/false");
 
     }
 }
