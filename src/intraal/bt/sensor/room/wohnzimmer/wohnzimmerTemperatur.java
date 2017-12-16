@@ -8,9 +8,14 @@ package intraal.bt.sensor.room.wohnzimmer;
 import com.tinkerforge.BrickletTemperature;
 import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
+import intraal.bt.config.connection.siot.SiotDashboardInput;
 import intraal.bt.config.mqtt.MQTTCommunication;
 import intraal.bt.config.mqtt.MQTTParameters;
+import intraal.bt.sensor.room.schlafzimmer.schlafzimmerMotion;
+import intraal.bt.system.settings.Settings;
 import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -27,12 +32,17 @@ public class wohnzimmerTemperatur implements MqttCallback {
     MqttMessage message;
     MQTTParameters p;
     MQTTCommunication c;
+    Settings s;
+    SiotDashboardInput sdi = new SiotDashboardInput();
 
     /////////////////// EDIT HERE ///////////////////////
     private final String UID = "taL";
     private final String ROOM = "Kuche";
     private final String MODUL = "Temperatur";
     /////////////////////////////////////////////////////
+
+    private int toHigh = s.getTemperaturToHigh();
+    private int toLow = s.getTemperaturToLow();
 
     public wohnzimmerTemperatur() {
 
@@ -68,28 +78,45 @@ public class wohnzimmerTemperatur implements MqttCallback {
         c.publishActualWill("online".getBytes());
         p.getLastWillMessage();
     }
-    
-   public void getTemp() throws Exception {
+
+    public void getTemp() throws Exception {
         connectHost();
         connectMQTT();
         message = new MqttMessage();
         // Add temperature reached listener (parameter has unit °C/100)
         tinkerforg.addTemperatureListener((short temperature) -> {
-            int toHigh = 25 * 100;
-            int toLow = 21 * 100;
-            
+
             if (temperature > toHigh) {
                 message.setPayload((temperature / 100.0 + " Grad => Hoch").getBytes());
                 message.setRetained(true);
                 message.setQos(0);
                 c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
                 System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+
+                sdi.setInputKey(con.getT_inputKey_wohnz());       // inputKey
+                sdi.setInputMessage(message.toString());
+                try {
+                    sdi.sendInput();
+                } catch (Exception ex) {
+                    System.out.print("Fehler");
+                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             } else if (temperature <= toLow) {
                 message.setPayload((temperature / 100.0 + " Grad => Tief").getBytes());
                 message.setRetained(true);
                 message.setQos(0);
                 c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
                 System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+
+                sdi.setInputKey(con.getT_inputKey_wohnz());       // inputKey
+                sdi.setInputMessage(message.toString());
+                try {
+                    sdi.sendInput();
+                } catch (Exception ex) {
+                    System.out.print("Fehler");
+                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 

@@ -8,9 +8,14 @@ package intraal.bt.sensor.room.eingang;
 import com.tinkerforge.BrickletAmbientLightV2;
 import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
+import intraal.bt.config.connection.siot.SiotDashboardInput;
 import intraal.bt.config.mqtt.MQTTCommunication;
 import intraal.bt.config.mqtt.MQTTParameters;
+import intraal.bt.sensor.room.schlafzimmer.schlafzimmerMotion;
+import intraal.bt.system.settings.Settings;
 import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -27,15 +32,17 @@ public class eingangAmbientLight implements MqttCallback {
     MqttMessage message;
     MQTTParameters p;
     MQTTCommunication c;
-    
+    Settings s;
+    SiotDashboardInput sdi = new SiotDashboardInput();
+
     /////////////////// EDIT HERE ///////////////////////
     private final String UID = "yg4";
     private final String ROOM = "Eingang";
     private final String MODUL = "AmbienteLight";
     /////////////////////////////////////////////////////
-    
-    private final static int offValue = 2 * 100;
-    private final static int onValue = 3 * 100;
+
+    private int offValue = s.getAmbientLightOff();
+    private int onValue = s.getAmbientLightOn();
 
     public eingangAmbientLight() {
 
@@ -82,16 +89,34 @@ Infrarotsensor
         tinkerforg.addIlluminanceReachedListener((long illuminance) -> {
             message.setRetained(true);
             message.setQos(0);
-            
+
             if (illuminance < offValue) {
                 message.setPayload((illuminance / 10.0 + " lux => Licht aus").getBytes());
                 c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
                 System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-                
+
+                sdi.setInputKey(con.getAl_inputKey_schlafz());       // inputKey
+                sdi.setInputMessage(message.toString());
+                try {
+                    sdi.sendInput();
+                } catch (Exception ex) {
+                    System.out.print("Fehler");
+                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             } else if (illuminance >= onValue) {
                 message.setPayload((illuminance / 10.0 + "lux => Licht ein").getBytes());
                 c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
                 System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+
+                sdi.setInputKey(con.getAl_inputKey_schlafz());       // inputKey
+                sdi.setInputMessage(message.toString());
+                try {
+                    sdi.sendInput();
+                } catch (Exception ex) {
+                    System.out.print("Fehler");
+                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
@@ -115,5 +140,5 @@ Infrarotsensor
     public void deliveryComplete(IMqttDeliveryToken token) {
         System.out.println(" =========== Delivery Completed =========== ");
     }
-    
+
 }

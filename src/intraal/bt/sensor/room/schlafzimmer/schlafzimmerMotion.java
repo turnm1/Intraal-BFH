@@ -88,7 +88,7 @@ Motionsensor
             c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
             System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
             
-            sdi.setInputKey(con.getAl_inputKey_bad());       // inputKey
+            sdi.setInputKey(con.getM_inputKey_schlafz());    
             sdi.setInputMessage(message.toString());
             try {
                 sdi.sendInput();
@@ -106,7 +106,7 @@ Motionsensor
             c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
             System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
             
-            sdi.setInputKey(con.getAl_inputKey_bad());       // inputKey
+            sdi.setInputKey(con.getM_inputKey_schlafz());     
             sdi.setInputMessage(message.toString());
             try {
                 sdi.sendInput();
@@ -114,7 +114,6 @@ Motionsensor
                 System.out.print("Fehler");
                 Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
         });
     }
 

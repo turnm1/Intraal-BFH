@@ -8,9 +8,13 @@ package intraal.bt.sensor.room.bad;
 import com.tinkerforge.BrickletMotionDetector;
 import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
+import intraal.bt.config.connection.siot.SiotDashboardInput;
 import intraal.bt.config.mqtt.MQTTCommunication;
 import intraal.bt.config.mqtt.MQTTParameters;
+import intraal.bt.sensor.room.schlafzimmer.schlafzimmerMotion;
 import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -27,6 +31,7 @@ public class badMotion implements MqttCallback {
     MqttMessage message;
     MQTTParameters p;
     MQTTCommunication c;
+    SiotDashboardInput sdi = new SiotDashboardInput();
 
     /////////////////// EDIT HERE ///////////////////////
     private final String UID = "qtu";
@@ -34,7 +39,7 @@ public class badMotion implements MqttCallback {
     private final String MODUL = "Motion";
     /////////////////////////////////////////////////////
 
-/*
+    /*
     Connection with WLAN & MQTT Raspberry Pi Broker
      */
     private void connectHost() throws Exception {
@@ -65,47 +70,66 @@ public class badMotion implements MqttCallback {
         p.getLastWillMessage();
     }
 
-/*
+    /*
 Motionsensor
-*/
-public void doMotion() throws Exception {
-    connectHost();
-    connectMQTT();
-       message = new MqttMessage();
+     */
+    public void doMotion() throws Exception {
+        connectHost();
+        connectMQTT();
+        message = new MqttMessage();
         // send (id, value, unit, date, time, status)
-        
-                // Add motion detected listener
-		tinkerforg.addMotionDetectedListener(() -> {
-                    // publish Value
-                    message.setPayload("Motion Detected".getBytes());
-                    message.setRetained(true);
-                    message.setQos(0);
-                    c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
-                    System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID)+": "+message);
-    });
-		// Add detection cycle ended listener
-		tinkerforg.addDetectionCycleEndedListener(() -> {
-                    message.setPayload("Motion Ended".getBytes());
-                    message.setRetained(true);
-                    message.setQos(0);
-                    c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
-                    System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID)+": "+message);
-    });
-}
+
+        // Add motion detected listener
+        tinkerforg.addMotionDetectedListener(() -> {
+            // publish Value
+            message.setPayload("Motion Detected".getBytes());
+            message.setRetained(true);
+            message.setQos(0);
+            c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
+            System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+
+            sdi.setInputKey(con.getM_inputKey_bad());
+            sdi.setInputMessage(message.toString());
+            try {
+                sdi.sendInput();
+            } catch (Exception ex) {
+                System.out.print("Fehler");
+                Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        });
+        // Add detection cycle ended listener
+        tinkerforg.addDetectionCycleEndedListener(() -> {
+            message.setPayload("Motion Ended".getBytes());
+            message.setRetained(true);
+            message.setQos(0);
+            c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
+            System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+
+            sdi.setInputKey(con.getM_inputKey_bad());
+            sdi.setInputMessage(message.toString());
+            try {
+                sdi.sendInput();
+            } catch (Exception ex) {
+                System.out.print("Fehler");
+                Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+    }
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        System.out.println(" =========== Room: "+ROOM + ", Typ: " + MODUL +", Message Arrived! =========== ");
+        System.out.println(" =========== Room: " + ROOM + ", Typ: " + MODUL + ", Message Arrived! =========== ");
     }
 
     @Override
     public void connectionLost(Throwable cause) {
-        System.out.println(" =========== Room: "+ROOM + ", Typ: " + MODUL +", Disconnected! =========== ");
+        System.out.println(" =========== Room: " + ROOM + ", Typ: " + MODUL + ", Disconnected! =========== ");
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
-       System.out.println(" =========== Room: "+ROOM + ", Typ: " + MODUL +",  OK! =========== ");
+        System.out.println(" =========== Room: " + ROOM + ", Typ: " + MODUL + ",  OK! =========== ");
     }
 
 }

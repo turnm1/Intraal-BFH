@@ -8,9 +8,13 @@ package intraal.bt.sensor.room.schlafzimmer;
 import com.tinkerforge.BrickletAmbientLightV2;
 import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
+import intraal.bt.config.connection.siot.SiotDashboardInput;
 import intraal.bt.config.mqtt.MQTTCommunication;
 import intraal.bt.config.mqtt.MQTTParameters;
+import intraal.bt.system.settings.Settings;
 import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -27,15 +31,17 @@ public class schlafzimmerAmbientLight implements MqttCallback {
     MqttMessage message;
     MQTTParameters p;
     MQTTCommunication c;
-    
+    Settings s;
+    SiotDashboardInput sdi = new SiotDashboardInput();
+
     /////////////////// EDIT HERE ///////////////////////
     private final String UID = "yhZ";
     private final String ROOM = "Schlafzimmer";
     private final String MODUL = "AmbienteLight";
     /////////////////////////////////////////////////////
-    
-    private final static int offValue = 2 * 100;
-    private final static int onValue = 3 * 100;
+
+    private int offValue = s.getAmbientLightOff();
+    private int onValue = s.getAmbientLightOn();
 
     public schlafzimmerAmbientLight() {
 
@@ -82,22 +88,39 @@ public class schlafzimmerAmbientLight implements MqttCallback {
         tinkerforg.addIlluminanceReachedListener((long illuminance) -> {
             message.setRetained(true);
             message.setQos(0);
-            
+
             if (illuminance < offValue) {
                 message.setPayload((illuminance / 10.0 + " lux => Licht aus").getBytes());
                 c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
                 System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-                
+
+                sdi.setInputKey(con.getAl_inputKey_schlafz());   
+                sdi.setInputMessage(message.toString());
+                try {
+                    sdi.sendInput();
+                } catch (Exception ex) {
+                    System.out.print("Fehler");
+                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             } else if (illuminance >= onValue) {
                 message.setPayload((illuminance / 10.0 + "lux => Licht ein").getBytes());
                 c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
                 System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+
+                sdi.setInputKey(con.getAl_inputKey_schlafz()); 
+                sdi.setInputMessage(message.toString());
+                try {
+                    sdi.sendInput();
+                } catch (Exception ex) {
+                    System.out.print("Fehler");
+                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
         });
 
-        // Get threshold callbacks with a debounce time of 10 seconds (10000ms)
         tinkerforg.setDebouncePeriod(10000);
-        // Configure threshold for illuminance "greater than 500 Lux" (unit is Lux/100)
         tinkerforg.setIlluminanceCallbackThreshold('o', offValue, onValue);
     }
 
@@ -115,5 +138,5 @@ public class schlafzimmerAmbientLight implements MqttCallback {
     public void deliveryComplete(IMqttDeliveryToken token) {
         System.out.println(" =========== Delivery Completed =========== ");
     }
-    
+
 }

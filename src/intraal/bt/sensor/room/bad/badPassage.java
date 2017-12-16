@@ -8,9 +8,13 @@ package intraal.bt.sensor.room.bad;
 import com.tinkerforge.BrickletDistanceIR;
 import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
+import intraal.bt.config.connection.siot.SiotDashboardInput;
 import intraal.bt.config.mqtt.MQTTCommunication;
 import intraal.bt.config.mqtt.MQTTParameters;
+import intraal.bt.sensor.room.schlafzimmer.schlafzimmerMotion;
 import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -27,6 +31,7 @@ public class badPassage implements MqttCallback {
     MqttMessage message;
     MQTTParameters p;
     MQTTCommunication c;
+    SiotDashboardInput sdi = new SiotDashboardInput();
 
     private int flag = 0;
 
@@ -81,19 +86,36 @@ Infrarotsensor
         tinkerforg.addDistanceListener((int distance) -> {
             message.setRetained(true);
             message.setQos(0);
-            
+
             if (distance <= 350 && flag != 0) {
                 flag = 0;
                 message.setPayload("Passage Detected".getBytes());
                 c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
                 System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-                
+
+                sdi.setInputKey(con.getP_inputKey_bad());       // inputKey
+                sdi.setInputMessage(message.toString());
+                try {
+                    sdi.sendInput();
+                } catch (Exception ex) {
+                    System.out.print("Fehler");
+                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             } else if (distance > 350 && flag != 1) {
                 flag = 1;
                 message.setPayload("No Passage".getBytes());
                 c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
                 System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-                
+
+                sdi.setInputKey(con.getP_inputKey_bad());       // inputKey
+                sdi.setInputMessage(message.toString());
+                try {
+                    sdi.sendInput();
+                } catch (Exception ex) {
+                    System.out.print("Fehler");
+                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         // Set period for distance callback to 0.5s (500ms)
