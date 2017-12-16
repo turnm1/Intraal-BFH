@@ -45,65 +45,51 @@ public class DeviceRestService {
 
         int numCharsRead;
         char[] charArray = new char[1024];
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         while ((numCharsRead = isr.read(charArray)) > 0) {
             sb.append(charArray, 0, numCharsRead);
         }
-        String result = sb.toString();
 
-//      System.out.println(result);
         System.out.println("Secure connection with " + webPage + " successful!");
         System.out.println("*** END ***");
     }
 
-    public String getMethode(String methode) throws MalformedURLException, IOException {
+    public void getMethode(String methode) throws MalformedURLException, IOException, UnirestException {
+        System.out.println("*** BEGIN ***");
+      	System.out.println(webPage + methode);
         byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
         String authStringEnc = new String(authEncBytes);
-
-        URL url = new URL(webPage + methode);
-        URLConnection urlConnection = url.openConnection();
-        urlConnection.setRequestProperty("Authorization", "Basic " + authStringEnc);
-        InputStream is = urlConnection.getInputStream();
-        InputStreamReader isr = new InputStreamReader(is);
-
-        int numCharsRead;
-        char[] charArray = new char[1024];
-        StringBuffer sb = new StringBuffer();
-        while ((numCharsRead = isr.read(charArray)) > 0) {
-            sb.append(charArray, 0, numCharsRead);
-        }
-        String result = sb.toString();
-        System.out.println("GET METHODE: " + webPage + methode);
-        return result;
+    	HttpRequest request = Unirest.get(webPage + methode)
+    			.header("accept", "application/json")
+    			.header("Accept-Charset", "UTF-8")
+        		.header("Authorization", "Basic "+authStringEnc);
+    	HttpResponse<String> jsonResponse = request.asString();
+    	System.out.println("Response Status Code: "+jsonResponse.getStatus());
+        System.out.println("Response Status Code: "+jsonResponse.getBody());
+        System.out.println("*** END ***");
     }
 
     public void putMethode(String methode) throws MalformedURLException, IOException, UnirestException {
-//        URLConnection connection = new URL(webPage + methode).openConnection();
-//        connection.setRequestProperty("Accept-Charset", "UTF-8");
-//        InputStream response = connection.getInputStream();
+        System.out.println("*** BEGIN ***");
     	System.out.println(webPage + methode);
         byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
         String authStringEnc = new String(authEncBytes);
     	HttpRequest request = Unirest.put(webPage + methode)
     			.header("accept", "application/json")
     			.header("Accept-Charset", "UTF-8")
-        		.header("Authorization", "Basic dm5mMTpmNlBFejZRc1Rabm4=")
+        		.header("Authorization", "Basic "+authStringEnc)
     			.queryString("switchState", "false");
     	HttpResponse<String> jsonResponse = request.asString();
-    	System.out.println(jsonResponse.getBody().toString());
+    	System.out.println("Response Status Code: "+jsonResponse.getStatus());
+        System.out.println("*** END ***");
     }
 
     public static void main(String[] args) throws IOException, UnirestException {
 
         DeviceRestService drs = new DeviceRestService();
-//        drs.checkConnection();
-        Device d = new Device();
-
-//       String JSON = drs.getMethode("/api/Devices/5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
-//        d.parsJsonToObjetc(JSON);
-//        System.out.println(d.getValueDate()+" "+d.getName()+" "+d.getSerial());
-//        drs.putMethode("/api/Devices/5b9b3fea-cc8d-45ad-92b3-9caf3be725bc?switchState=true");
-        drs.putMethode("/api/Devices/5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
+        drs.checkConnection();
+   //   drs.putMethode("/api/Devices/5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
+        drs.getMethode("/api/Devices/5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
 
     }
 }
