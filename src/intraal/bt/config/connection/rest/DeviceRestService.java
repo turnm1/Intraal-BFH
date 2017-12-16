@@ -85,9 +85,9 @@ public class DeviceRestService {
         byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
         String authStringEnc = new String(authEncBytes);
     	HttpRequest request = Unirest.put(webPage + methode)
-//    			.header("accept", "application/json")
-//    			.header("Accept-Charset", "UTF-8")
-    			.header("authorization", "basic " + authStringEnc)
+    			.header("accept", "application/json")
+    			.header("Accept-Charset", "UTF-8")
+        		.header("Authorization", "Basic dm5mMTpmNlBFejZRc1Rabm4=")
     			.queryString("switchState", "false");
     	HttpResponse<String> jsonResponse = request.asString();
     	System.out.println(jsonResponse.getBody().toString());
