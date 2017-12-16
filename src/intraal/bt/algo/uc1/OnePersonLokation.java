@@ -31,17 +31,13 @@ public class OnePersonLokation implements MqttCallback {
     private String motionLocation;
     private String lastMotionLocation;
     private String passageLocation;
-    
-    private static String  motionDetected;
-    private static String passageDetected = "0";
-    private static String motionWas;
+    private String passageDetected = "0"; // war static 16.12.17
 
     /////////////////// EDIT HERE ///////////////////////
-    private final String UID = "UseCase";
-    private final String ROOM = "One";
-    private final String MODUL = "OnePersonLocation";
+    private final String UID = "OnePerson";
+    private final String USECASENR = "Location";
+    private final String USECASE = "Helper";
     /////////////////////////////////////////////////////
-
 
     /*
     Connection with WLAN & MQTT Raspberry Pi Broker
@@ -66,7 +62,7 @@ public class OnePersonLokation implements MqttCallback {
         p.setLastWillMessage("offline".getBytes());
         p.setLastWillQoS(0);
         p.setServerURIs(URI.create(con.getBrokerConnection()));
-        p.setWillTopic(con.getLastWillConnectionTopic(MODUL, ROOM, UID));
+        p.setWillTopic(con.getLastWillConnectionTopic(USECASE, USECASENR, UID));
         p.setMqttCallback(this);
         c.connect(p);
         c.publishActualWill("online".getBytes());
@@ -103,38 +99,15 @@ public class OnePersonLokation implements MqttCallback {
         return passageLocation;
     }
 
-    
-    
-//        message = new MqttMessage();
-//        message.setRetained(true);
-//        message.setQos(0);
-//        message.setPayload((" lux => Licht aus").getBytes());
-//        c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
-//        System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-    
-// if (messageVal.equals("Motion Detected")) {
-//            setMotionLocation(sendedRoom);
-//        } else if (messageVal.equals("Motion Ended")){
-//            setLastMotionLocation(sendedRoom);
-//        } else if (messageVal.equals("Passage Detected")) {
-//            setPassageLocation(sendedRoom);
-//        }
-//         if (getMotionLocation().equals(getPassageLocation())){
-//                direction = getPassageLocation();
-//                System.out.println(direction);
-//           } else {
-//             direction = getMotionLocation();
-//         }
-//        }
-    
-    private void entryRoom(){
-        if (motionDetected.equals(passageDetected)){
-            System.out.println(passageDetected);
-        }
-    }
-    
     private void pushLocation(String location){
         System.out.println(location);
+    
+        message = new MqttMessage();
+        message.setRetained(true);
+        message.setQos(0);
+        message.setPayload((location).getBytes());
+        c.publish(con.getClientIDValueTopic(USECASE, USECASENR, UID), message);
+        System.out.println(con.getClientIDValueTopic(USECASE, USECASENR, UID) + ": " + message);
     }
     
     @Override

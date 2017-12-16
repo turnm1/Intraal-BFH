@@ -19,7 +19,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  *
  * @author turna
  */
-public class OnePersonLokation2 implements MqttCallback {
+public class xxxLocation implements MqttCallback {
 
     BrickletAmbientLightV2 tinkerforg;
     ConnectionParameters con;

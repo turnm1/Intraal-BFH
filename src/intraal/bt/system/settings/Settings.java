@@ -17,8 +17,8 @@ public class Settings {
     private int ambientLightOn = 300;
     private int temperaturToHigh = 2500;
     private int temperaturToLow = 2100;
-    private Time startNightPhase;
-    private Time endNightPhase;
+    private String startNightPhase = "20:00";
+    private String endNightPhase = "06:00";
     private boolean demoModus = false;
 
     public int getTemperaturToLow() {
@@ -37,11 +37,11 @@ public class Settings {
         return ambientLightOn;
     }
 
-    public Time getEndNightPhase() {
+    public String getEndNightPhase() {
         return endNightPhase;
     }
 
-    public Time getStartNightPhase() {
+    public String getStartNightPhase() {
         return startNightPhase;
     }
 
@@ -69,11 +69,11 @@ public class Settings {
         this.demoModus = demoModus;
     }
 
-    public void setEndNightPhase(Time endNightPhase) {
+    public void setEndNightPhase(String endNightPhase) {
         this.endNightPhase = endNightPhase;
     }
 
-    public void setStartNightPhase(Time startNightPhase) {
+    public void setStartNightPhase(String startNightPhase) {
         this.startNightPhase = startNightPhase;
     }
 }
