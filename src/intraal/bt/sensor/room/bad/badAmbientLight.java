@@ -82,49 +82,53 @@ public class badAmbientLight implements MqttCallback {
     /*
 Infrarotsensor
      */
-    public void getLight() throws Exception {
-        connectHost();
-        connectMQTT();
-        message = new MqttMessage();
-        tinkerforg.addIlluminanceReachedListener(new BrickletAmbientLightV2.IlluminanceReachedListener() {
-            public void illuminanceReached(long illuminance) {
-
-                message.setRetained(true);
-                message.setQos(0);
-
-                if (illuminance < offValue) {
-                    message.setPayload((illuminance / 10.0 + " lux => Licht aus").getBytes());
-                    c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
-                    System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-
-                    sdi.setInputKey(con.getAl_inputKey_schlafz());       // inputKey
-                    sdi.setInputMessage(message.toString());
-                    try {
-                        sdi.sendInput();
-                    } catch (Exception ex) {
-                        System.out.print("Fehler");
-                        Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                } else if (illuminance >= onValue) {
-                    message.setPayload((illuminance / 10.0 + "lux => Licht ein").getBytes());
-                    c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
-                    System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-
-                    sdi.setInputKey(con.getAl_inputKey_schlafz());       // inputKey
-                    sdi.setInputMessage(message.toString());
-                    try {
-                        sdi.sendInput();
-                    } catch (Exception ex) {
-                        System.out.print("Fehler");
-                        Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+    public void getLight() {
+        try {
+            connectHost();
+            connectMQTT();
+            message = new MqttMessage();
+            tinkerforg.addIlluminanceReachedListener(new BrickletAmbientLightV2.IlluminanceReachedListener() {
+                public void illuminanceReached(long illuminance) {
+                    
+                    message.setRetained(true);
+                    message.setQos(0);
+                    
+                    if (illuminance < offValue) {
+                        message.setPayload((illuminance / 10.0 + " lux => Licht aus").getBytes());
+                        c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
+                        System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+                        
+                        sdi.setInputKey(con.getAl_inputKey_schlafz());       // inputKey
+                        sdi.setInputMessage(message.toString());
+                        try {
+                            sdi.sendInput();
+                        } catch (Exception ex) {
+                            System.out.print("Fehler");
+                            Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                    } else if (illuminance >= onValue) {
+                        message.setPayload((illuminance / 10.0 + "lux => Licht ein").getBytes());
+                        c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
+                        System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+                        
+                        sdi.setInputKey(con.getAl_inputKey_schlafz());       // inputKey
+                        sdi.setInputMessage(message.toString());
+                        try {
+                            sdi.sendInput();
+                        } catch (Exception ex) {
+                            System.out.print("Fehler");
+                            Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
-            }
-        });
-
-        tinkerforg.setDebouncePeriod(10000);
-        tinkerforg.setIlluminanceCallbackThreshold('o', offValue, onValue);
+            });
+            
+            tinkerforg.setDebouncePeriod(10000);
+            tinkerforg.setIlluminanceCallbackThreshold('o', offValue, onValue);
+        } catch (Exception ex) {
+            System.out.println("WIFI-Verbindung unterbrochen: "+ MODUL +"/"+ROOM+" IP: "+con.getTgBadIP());
+        }
     }
 
     @Override

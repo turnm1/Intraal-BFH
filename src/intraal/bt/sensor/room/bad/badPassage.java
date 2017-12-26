@@ -79,49 +79,53 @@ public class badPassage implements MqttCallback {
     /*
 Infrarotsensor
      */
-    public void doPassage() throws Exception {
-        connectHost();
-        connectMQTT();
-        message = new MqttMessage();
-        tinkerforg.addDistanceListener((int distance) -> {
-            message.setRetained(true);
-            message.setQos(0);
-
-            if (distance <= 350 && flag != 0) {
-                flag = 0;
-                message.setPayload("Passage Detected".getBytes());
-                c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
-                System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-
-                sdi.setInputKey(con.getP_inputKey_bad());       // inputKey
-                sdi.setInputMessage(message.toString());
-                try {
-                    sdi.sendInput();
-                } catch (Exception ex) {
-                    System.out.print("Fehler");
-                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+    public void doPassage() {
+        try {
+            connectHost();
+            connectMQTT();
+            message = new MqttMessage();
+            tinkerforg.addDistanceListener((int distance) -> {
+                message.setRetained(true);
+                message.setQos(0);
+                
+                if (distance <= 350 && flag != 0) {
+                    flag = 0;
+                    message.setPayload("Passage Detected".getBytes());
+                    c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
+                    System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+                    
+                    sdi.setInputKey(con.getP_inputKey_bad());       // inputKey
+                    sdi.setInputMessage(message.toString());
+                    try {
+                        sdi.sendInput();
+                    } catch (Exception ex) {
+                        System.out.print("Fehler");
+                        Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                } else if (distance > 350 && flag != 1) {
+                    flag = 1;
+                    message.setPayload("No Passage".getBytes());
+                    c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
+                    System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+                    
+                    sdi.setInputKey(con.getP_inputKey_bad());       // inputKey
+                    sdi.setInputMessage(message.toString());
+                    try {
+                        sdi.sendInput();
+                    } catch (Exception ex) {
+                        System.out.print("Fehler");
+                        Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-
-            } else if (distance > 350 && flag != 1) {
-                flag = 1;
-                message.setPayload("No Passage".getBytes());
-                c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
-                System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-
-                sdi.setInputKey(con.getP_inputKey_bad());       // inputKey
-                sdi.setInputMessage(message.toString());
-                try {
-                    sdi.sendInput();
-                } catch (Exception ex) {
-                    System.out.print("Fehler");
-                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        // Set period for distance callback to 0.5s (500ms)
-        // Note: The distance callback is only called every 0.5 seconds
-        //       if the distance has changed since the last call!
-        tinkerforg.setDistanceCallbackPeriod(200);
+            });
+            // Set period for distance callback to 0.5s (500ms)
+            // Note: The distance callback is only called every 0.5 seconds
+            //       if the distance has changed since the last call!
+            tinkerforg.setDistanceCallbackPeriod(200);
+        } catch (Exception ex) {
+            System.out.println("WIFI-Verbindung unterbrochen: "+ MODUL +"/"+ROOM+" IP: "+con.getTgBadIP());
+        }
 
     }
 

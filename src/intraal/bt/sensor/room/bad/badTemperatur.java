@@ -79,50 +79,54 @@ public class badTemperatur implements MqttCallback {
         p.getLastWillMessage();
     }
 
-    public void getTemp() throws Exception {
-        connectHost();
-        connectMQTT();
-        message = new MqttMessage();
-        // Add temperature reached listener (parameter has unit °C/100)
-        tinkerforg.addTemperatureListener((short temperature) -> {
-            if (temperature > toHigh) {
-                message.setPayload((temperature / 100.0 + " Grad => Hoch").getBytes());
-                message.setRetained(true);
-                message.setQos(0);
-                c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
-                System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-
-                sdi.setInputKey(con.getT_inputKey_bad());       // inputKey
-                sdi.setInputMessage(message.toString());
-                try {
-                    sdi.sendInput();
-                } catch (Exception ex) {
-                    System.out.print("Fehler");
-                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+    public void getTemp()  {
+        try {
+            connectHost();
+            connectMQTT();
+            message = new MqttMessage();
+            // Add temperature reached listener (parameter has unit °C/100)
+            tinkerforg.addTemperatureListener((short temperature) -> {
+                if (temperature > toHigh) {
+                    message.setPayload((temperature / 100.0 + " Grad => Hoch").getBytes());
+                    message.setRetained(true);
+                    message.setQos(0);
+                    c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
+                    System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+                    
+                    sdi.setInputKey(con.getT_inputKey_bad());       // inputKey
+                    sdi.setInputMessage(message.toString());
+                    try {
+                        sdi.sendInput();
+                    } catch (Exception ex) {
+                        System.out.print("Fehler");
+                        Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                } else if (temperature <= toLow) {
+                    message.setPayload((temperature / 100.0 + " Grad => Tief").getBytes());
+                    message.setRetained(true);
+                    message.setQos(0);
+                    c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
+                    System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+                    
+                    sdi.setInputKey(con.getT_inputKey_bad());       // inputKey
+                    sdi.setInputMessage(message.toString());
+                    try {
+                        sdi.sendInput();
+                    } catch (Exception ex) {
+                        System.out.print("Fehler");
+                        Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-
-            } else if (temperature <= toLow) {
-                message.setPayload((temperature / 100.0 + " Grad => Tief").getBytes());
-                message.setRetained(true);
-                message.setQos(0);
-                c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
-                System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-
-                sdi.setInputKey(con.getT_inputKey_bad());       // inputKey
-                sdi.setInputMessage(message.toString());
-                try {
-                    sdi.sendInput();
-                } catch (Exception ex) {
-                    System.out.print("Fehler");
-                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-
-        // Set period for temperature callback to 1s (1000ms)
-        // Note: The temperature callback is only called every second
-        //       if the temperature has changed since the last call!
-        tinkerforg.setTemperatureCallbackPeriod(10000);
+            });
+            
+            // Set period for temperature callback to 1s (1000ms)
+            // Note: The temperature callback is only called every second
+            //       if the temperature has changed since the last call!
+            tinkerforg.setTemperatureCallbackPeriod(10000);
+        } catch (Exception ex) {
+            System.out.println("WIFI-Verbindung unterbrochen: "+ MODUL +"/"+ROOM+" IP: "+con.getTgBadIP());
+        }
     }
 
     @Override

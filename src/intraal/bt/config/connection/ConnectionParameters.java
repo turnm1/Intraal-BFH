@@ -44,9 +44,19 @@ public class ConnectionParameters {
     private final String SMPassword = "f6PEz6QsTZnn";
     private final String SMauthString = SMname + ":" + SMPassword;
     
+    private final String twilio_sid = "ACfdb500575b3af7eb470252c03f511c5d";
+    private final String twilio_auth_token = "235d5b27262f7fb0f0634bc7a5a810bc";
+    
     /*
     SIOT Input Key's
     */
+    // TinkerForge Sensor Status
+    private final String status_inputKey_bad = "c082d840-18ee-87d2-0012-12bfeabcee70";
+    private final String status_inputKey_eingang1 = "263cf0df-2dca-4217-baf4-a3ef07ff2bd7";
+    private final String status_inputKey_eingang2 = "b87745b9-c672-9eec-8ee3-cfa91ba2f3d1";
+    private final String status_inputKey_küche = "a8beef69-b67c-dd74-9d4c-3298b4d06452";
+    private final String status_inputKey_schlafz = "e67f9183-0b61-3062-81fe-5052892e9ed4";
+    private final String status_inputKey_wohnz = "13fcad5b-8770-7ac9-5f5b-156f807ba5bf";
     // Ambient Lights Sensors
     private final String al_inputKey_bad = "db187d13-ddff-849a-2ebd-a2ad08521752";
     private final String al_inputKey_eingang = "636e7e8b-7a84-5ee4-f17b-b09118208c7e";
@@ -87,9 +97,9 @@ public class ConnectionParameters {
      */
     // Fix static UID's
     private final String smWohnzimmerPlugUID = "5b9b3fea-cc8d-45ad-92b3-9caf3be725bc";
-    private final String smSchlafzimmerPlugUID = "";
-    private final String smEingangPlugUID = "ca224bf7-bf6c-4d74-93fe-da4de71cdbb6";
-    private final String smBadPlugUID = "";
+    private final String smSchlafzimmerPlugUID = "ca224bf7-bf6c-4d74-93fe-da4de71cdbb6";
+    private final String smKüchePlugUID = "30d97038-8857-4df6-b0c3-cf7e27a820c3";
+    private final String smBadPlugUID = "e3109c4e-b8f5-4687-88f6-38477d84f5ca";
     
     /*
    BFH Sensors
@@ -195,9 +205,45 @@ public class ConnectionParameters {
         return onOff;
     }
     
+     /*
+    Twilio getter's
+    */
+
+    public String getTwilio_sid() {
+        return twilio_sid;
+    }
+
+    public String getTwilio_auth_token() {
+        return twilio_auth_token;
+    }
+     
+     
     /*
     SIOT Key getter's
     */
+    public String getStatus_inputKey_bad() {
+        return status_inputKey_bad;
+    }
+
+    public String getStatus_inputKey_eingang1() {
+        return status_inputKey_eingang1;
+    }
+
+    public String getStatus_inputKey_eingang2() {
+        return status_inputKey_eingang2;
+    }
+
+    public String getStatus_inputKey_küche() {
+        return status_inputKey_küche;
+    }
+
+    public String getStatus_inputKey_schlafz() {
+        return status_inputKey_schlafz;
+    }
+
+    public String getStatus_inputKey_wohnz() {
+        return status_inputKey_wohnz;
+    }     
 
     public String getAl_inputKey_bad() {
         return al_inputKey_bad;
@@ -324,7 +370,22 @@ public class ConnectionParameters {
     public String getSMname() {
         return SMname;
     } 
-    
+
+    public String getSmBadPlugUID() {
+        return smBadPlugUID;
+    }
+
+    public String getSmKüchePlugUID() {
+        return smKüchePlugUID;
+    }
+
+    public String getSmWohnzimmerPlugUID() {
+        return smWohnzimmerPlugUID;
+    }
+
+    public String getSmSchlafzimmerPlugUID() {
+        return smSchlafzimmerPlugUID;
+    }   
     
  
 ////////////////////////////////////////////////////////////////////////////////

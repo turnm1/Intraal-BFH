@@ -8,6 +8,7 @@ package intraal.bt.algo.uc1;
 import com.tinkerforge.BrickletAmbientLightV2;
 import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
+import intraal.bt.config.connection.siot.SiotDashboardInput;
 import intraal.bt.config.mqtt.MQTTCommunication;
 import intraal.bt.config.mqtt.MQTTParameters;
 import java.net.URI;
@@ -27,10 +28,8 @@ public class OnePersonLokation implements MqttCallback {
     MqttMessage message;
     MQTTParameters p;
     MQTTCommunication c;
+    SiotDashboardInput sdi;
 
-    private String motionLocation;
-    private String lastMotionLocation;
-    private String passageLocation;
     private String passageDetected = "0"; // war static 16.12.17
 
     /////////////////// EDIT HERE ///////////////////////
@@ -42,16 +41,9 @@ public class OnePersonLokation implements MqttCallback {
     /*
     Connection with WLAN & MQTT Raspberry Pi Broker
      */
-    private void connectHost() throws Exception {
-        con = new ConnectionParameters();
-   //    ipcon = new IPConnection();
-        p = new MQTTParameters();
-        ////////////////// EDIT HERE > IP ///////////////////
-  //      ipcon.connect(con.getTgEingang2IP(), con.getTgPort());
-        /////////////////////////////////////////////////////
-    }
-
     private void connectMQTT() throws Exception {
+        con = new ConnectionParameters();
+        sdi = new SiotDashboardInput();
         c = new MQTTCommunication();
         p = new MQTTParameters();
         p.setClientID(con.getClientIDTopic(UID));
@@ -70,44 +62,30 @@ public class OnePersonLokation implements MqttCallback {
     }
 
     public void locationOfPerson() throws Exception {
-        connectHost();
         connectMQTT();
         c.subscribe("Gateway/10.0.233.51/#", 0);
     }
 
-    public void setMotionLocation(String lokationPosition) {
-        this.motionLocation = lokationPosition;
-    }
-    
-    public void setLastMotionLocation(String lokationPosition) {
-        this.lastMotionLocation = lokationPosition;
-    }
-
-    public void setPassageLocation(String passageLocation) {
-        this.passageLocation = passageLocation;
-    }
-
-    public String getMotionLocation() {
-        return motionLocation;
-    }
-    
-    public String getLastMotionLocation() {
-        return lastMotionLocation;
-    }
-
-    public String getPassageLocation() {
-        return passageLocation;
-    }
-
-    private void pushLocation(String location){
-        System.out.println(location);
-    
+    private void pushLocation(String location) throws Exception{
         message = new MqttMessage();
         message.setRetained(true);
         message.setQos(0);
         message.setPayload((location).getBytes());
+            sdi.setInputKey(con.getService_location());
+            sdi.setInputMessage(location); 
+            sdi.sendInput();
+                if (location.equals("Haus verlassen")){
+                    sdi.setInputKey(con.getService_inOrOut()); 
+                    sdi.setInputMessage(location);
+                    sdi.sendInput();
+                } else if (location.equals("Eingang")){
+                    location = "Zu Hause";
+                    sdi.setInputKey(con.getService_inOrOut());   
+                    sdi.setInputMessage(location);           
+                    sdi.sendInput();
+                }
         c.publish(con.getClientIDValueTopic(USECASE, USECASENR, UID), message);
-        System.out.println(con.getClientIDValueTopic(USECASE, USECASENR, UID) + ": " + message);
+        System.out.println("Location Algo Message: "+message);
     }
     
     @Override
@@ -117,17 +95,16 @@ public class OnePersonLokation implements MqttCallback {
             String[] res = topic.split("/", 5);
             String sendedRoom = res[3];
            
-               
                 if (sendedRoom.equals("Schlafzimmer")){
                    if ((messageVal).equals("Passage Detected") && !passageDetected.equals(sendedRoom) || passageDetected.equals("0")){
                        passageDetected = sendedRoom;
-                       pushLocation("L1"+passageDetected);
+                       pushLocation(passageDetected);
                    } else if (messageVal.equals("Motion Detected") && passageDetected.equals(sendedRoom)){
                        passageDetected = sendedRoom;
-                       pushLocation("L2"+sendedRoom);
+                       pushLocation(sendedRoom);
                    } else if ((messageVal).equals("Passage Detected") && passageDetected.equals(sendedRoom) || passageDetected.equals("0")){
                        passageDetected = "Wohnzimmer";
-                       pushLocation("L3"+passageDetected);
+                       pushLocation(passageDetected);
                    } 
                 }
                 else if (sendedRoom.equals("Kuche")){

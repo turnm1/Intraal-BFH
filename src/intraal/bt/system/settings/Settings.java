@@ -5,7 +5,6 @@
  */
 package intraal.bt.system.settings;
 
-import java.sql.Time;
 
 /**
  *
@@ -17,8 +16,8 @@ public class Settings {
     private int ambientLightOn = 300;
     private int temperaturToHigh = 2500;
     private int temperaturToLow = 2100;
-    private String startNightPhase = "20:00";
-    private String endNightPhase = "06:00";
+    private String startNightPhase = "18:00";
+    private String endNightPhase = "10:00";
     private boolean demoModus = false;
 
     public int getTemperaturToLow() {

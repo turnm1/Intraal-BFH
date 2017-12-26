@@ -21,7 +21,6 @@ import com.mashape.unirest.request.HttpRequest;
 import intraal.bt.config.connection.ConnectionParameters;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 /**
  *
@@ -128,12 +127,12 @@ public class SmartMeService {
         System.out.println("*** END ***");
     }
 
-//    public static void main(String[] args) throws IOException, UnirestException, MalformedURLException, JSONException {
-//        DeviceRestService drs = new DeviceRestService();
-//        // drs.checkConnection();
-//        // drs.putMethode("/api/Devices/5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
-//        // drs.getMethode("/api/Devices/", "ca224bf7-bf6c-4d74-93fe-da4de71cdbb6");
-//        drs.switchLightStatus("5b9b3fea-cc8d-45ad-92b3-9caf3be725bc", "false");
-//       // drs.getLightStatus("5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
-//    }
+    public static void main(String[] args) throws IOException, UnirestException, MalformedURLException, JSONException {
+        SmartMeService sm = new SmartMeService();
+        // sm.checkConnection();
+        // sm.putMethode("/api/Devices/5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
+        // sm.getMethode("/api/Devices/", "");
+        sm.switchLightStatus("ca224bf7-bf6c-4d74-93fe-da4de71cdbb6", "false");
+       // sm.getLightStatus("5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
+    }
 }

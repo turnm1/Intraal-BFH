@@ -73,48 +73,52 @@ public class eingangMotion implements MqttCallback {
     /*
 Motionsensor
      */
-    public void doMotion() throws Exception {
-        connectHost();
-        connectMQTT();
-        message = new MqttMessage();
-        // send (id, value, unit, date, time, status)
-
-        // Add motion detected listener
-        tinkerforg.addMotionDetectedListener(() -> {
-            // publish Value
-            message.setPayload("Motion Detected".getBytes());
-            message.setRetained(true);
-            message.setQos(0);
-            c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
-            System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-
-            sdi.setInputKey(con.getM_inputKey_eingang());
-            sdi.setInputMessage(message.toString());
-            try {
-                sdi.sendInput();
-            } catch (Exception ex) {
-                System.out.print("Fehler");
-                Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        });
-        // Add detection cycle ended listener
-        tinkerforg.addDetectionCycleEndedListener(() -> {
-            message.setPayload("Motion Ended".getBytes());
-            message.setRetained(true);
-            message.setQos(0);
-            c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
-            System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-
-            sdi.setInputKey(con.getM_inputKey_eingang());
-            sdi.setInputMessage(message.toString());
-            try {
-                sdi.sendInput();
-            } catch (Exception ex) {
-                System.out.print("Fehler");
-                Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
+    public void doMotion()  {
+        try {
+            connectHost();
+            connectMQTT();
+            message = new MqttMessage();
+            // send (id, value, unit, date, time, status)
+            
+            // Add motion detected listener
+            tinkerforg.addMotionDetectedListener(() -> {
+                // publish Value
+                message.setPayload("Motion Detected".getBytes());
+                message.setRetained(true);
+                message.setQos(0);
+                c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
+                System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+                
+                sdi.setInputKey(con.getM_inputKey_eingang());
+                sdi.setInputMessage(message.toString());
+                try {
+                    sdi.sendInput();
+                } catch (Exception ex) {
+                    System.out.print("Fehler");
+                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            });
+            // Add detection cycle ended listener
+            tinkerforg.addDetectionCycleEndedListener(() -> {
+                message.setPayload("Motion Ended".getBytes());
+                message.setRetained(true);
+                message.setQos(0);
+                c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
+                System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+                
+                sdi.setInputKey(con.getM_inputKey_eingang());
+                sdi.setInputMessage(message.toString());
+                try {
+                    sdi.sendInput();
+                } catch (Exception ex) {
+                    System.out.print("Fehler");
+                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        } catch (Exception ex) {
+            System.out.println("WIFI-Verbindung unterbrochen: "+ MODUL +"/"+ROOM+" IP: "+con.getTgEingangIP());
+        }
     }
 
     @Override

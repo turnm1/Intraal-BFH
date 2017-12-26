@@ -20,9 +20,6 @@ import javax.net.ssl.HttpsURLConnection;
 public class SiotDashboardInput {
     
     ConnectionParameters siotCon = new ConnectionParameters();
-  //  private String USER_AGENT = "Mozilla/5.0";
-  //  private String URL = "https://siot.net:12955";
-  //  private String licence;
     public String inputKey;
     public String data;
 
@@ -47,7 +44,7 @@ public class SiotDashboardInput {
         con.setRequestProperty("User-Agent", siotCon.getSIOTUSER_AGENT()); //USER_AGENT
         con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-        String urlParameters = "message=" + data + "&topic=siot/DAT/" + siotCon.getSIOTLicence() + "/" + inputKey;
+        String urlParameters = "message= " + data + "&topic=siot/DAT/" + siotCon.getSIOTLicence() + "/" + inputKey;
 
         // Send post request
         con.setDoOutput(true);
@@ -57,7 +54,7 @@ public class SiotDashboardInput {
         wr.close();
 
         System.out.println("\nSending 'POST' request to URL : " + url);
-        System.out.println("Post parameters : " + urlParameters);
+        System.out.println("SIOT Dashbaord: " + urlParameters);
 
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;

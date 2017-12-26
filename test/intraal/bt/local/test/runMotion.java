@@ -24,7 +24,7 @@ public class runMotion {
     kuecheMotion m5 = new kuecheMotion();
 
     public void detectMotion() throws Exception {
-        m1.doMotion();
+        m1.doMotion(); 
         m2.doMotion();
         m3.doMotion();
         m4.doMotion();

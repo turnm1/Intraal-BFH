@@ -5,23 +5,25 @@
  */
 package intraal.bt.local.test;
 
+import intraal.bt.algo.uc1.NightLightUC1;
 import intraal.bt.algo.uc1.OnePersonLokation;
 
 /**
  *
  * @author turna
  */
-public class SubData {
+public class runLocation {
     
     OnePersonLokation opl = new OnePersonLokation();
     
-     public void sub()throws Exception {
+    
+     public void runLocation()throws Exception {
          opl.locationOfPerson();
     }
     
 
     public static void main(String[] args) throws Exception {
-        new SubData().sub();
+        new runLocation().runLocation();
     }
 
 }

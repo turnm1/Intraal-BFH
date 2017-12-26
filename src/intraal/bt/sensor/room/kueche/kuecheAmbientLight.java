@@ -82,48 +82,52 @@ public class kuecheAmbientLight implements MqttCallback {
     /*
     Infrarotsensor
      */
-    public void getLight() throws Exception {
-        connectHost();
-        connectMQTT();
-        message = new MqttMessage();
-        tinkerforg.addIlluminanceReachedListener((long illuminance) -> {
-            message.setRetained(true);
-            message.setQos(0);
-
-            if (illuminance < offValue) {
-                message.setPayload((illuminance / 10.0 + " lux => Licht aus").getBytes());
-                c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
-                System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-
-                sdi.setInputKey(con.getAl_inputKey_schlafz());       // inputKey
-                sdi.setInputMessage(message.toString());
-                try {
-                    sdi.sendInput();
-                } catch (Exception ex) {
-                    System.out.print("Fehler");
-                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+    public void getLight()  {
+        try {
+            connectHost();
+            connectMQTT();
+            message = new MqttMessage();
+            tinkerforg.addIlluminanceReachedListener((long illuminance) -> {
+                message.setRetained(true);
+                message.setQos(0);
+                
+                if (illuminance < offValue) {
+                    message.setPayload((illuminance / 10.0 + " lux => Licht aus").getBytes());
+                    c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
+                    System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+                    
+                    sdi.setInputKey(con.getAl_inputKey_schlafz());       // inputKey
+                    sdi.setInputMessage(message.toString());
+                    try {
+                        sdi.sendInput();
+                    } catch (Exception ex) {
+                        System.out.print("Fehler");
+                        Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                } else if (illuminance >= onValue) {
+                    message.setPayload((illuminance / 10.0 + "lux => Licht ein").getBytes());
+                    c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
+                    System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
+                    
+                    sdi.setInputKey(con.getAl_inputKey_schlafz());       // inputKey
+                    sdi.setInputMessage(message.toString());
+                    try {
+                        sdi.sendInput();
+                    } catch (Exception ex) {
+                        System.out.print("Fehler");
+                        Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-
-            } else if (illuminance >= onValue) {
-                message.setPayload((illuminance / 10.0 + "lux => Licht ein").getBytes());
-                c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
-                System.out.println(con.getClientIDValueTopic(MODUL, ROOM, UID) + ": " + message);
-
-                sdi.setInputKey(con.getAl_inputKey_schlafz());       // inputKey
-                sdi.setInputMessage(message.toString());
-                try {
-                    sdi.sendInput();
-                } catch (Exception ex) {
-                    System.out.print("Fehler");
-                    Logger.getLogger(schlafzimmerMotion.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-
-        // Get threshold callbacks with a debounce time of 10 seconds (10000ms)
-        tinkerforg.setDebouncePeriod(10000);
-        // Configure threshold for illuminance "greater than 500 Lux" (unit is Lux/100)
-        tinkerforg.setIlluminanceCallbackThreshold('o', offValue, onValue);
+            });
+            
+            // Get threshold callbacks with a debounce time of 10 seconds (10000ms)
+            tinkerforg.setDebouncePeriod(10000);
+            // Configure threshold for illuminance "greater than 500 Lux" (unit is Lux/100)
+            tinkerforg.setIlluminanceCallbackThreshold('o', offValue, onValue);
+        } catch (Exception ex) {
+            System.out.println("WIFI-Verbindung unterbrochen: "+ MODUL +"/"+ROOM+" IP: "+con.getTgKücheIP());
+        }
     }
 
     @Override
