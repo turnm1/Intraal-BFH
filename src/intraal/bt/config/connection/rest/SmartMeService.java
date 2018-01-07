@@ -81,8 +81,8 @@ public class SmartMeService {
     }
 
     public void switchLightStatus(String ID, String onOffswitch) throws MalformedURLException, IOException, UnirestException {
-        System.out.println("*** BEGIN ***");
-        System.out.println(webPage + "/api/Devices/" + ID);
+      //  System.out.println("*** BEGIN ***");
+      //  System.out.println(webPage + "/api/Devices/" + ID);
         byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
         String authStringEnc = new String(authEncBytes);
         HttpRequest request = Unirest.put(webPage + "/api/Devices/" + ID)
@@ -91,8 +91,8 @@ public class SmartMeService {
                 .header("Authorization", "Basic " + authStringEnc)
                 .queryString("switchState", onOffswitch);
         HttpResponse<String> jsonResponse = request.asString();
-        System.out.println("Response Status Code: " + jsonResponse.getStatus());
-        System.out.println("*** END ***");
+      //  System.out.println("Response Status Code: " + jsonResponse.getStatus());
+      //  System.out.println("*** END ***");
     }
 
     
@@ -127,12 +127,11 @@ public class SmartMeService {
         System.out.println("*** END ***");
     }
 
-    public static void main(String[] args) throws IOException, UnirestException, MalformedURLException, JSONException {
-        SmartMeService sm = new SmartMeService();
-        // sm.checkConnection();
-        // sm.putMethode("/api/Devices/5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
-        // sm.getMethode("/api/Devices/", "");
-        sm.switchLightStatus("ca224bf7-bf6c-4d74-93fe-da4de71cdbb6", "false");
-       // sm.getLightStatus("5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
-    }
+//    public static void main(String[] args) throws IOException, UnirestException, MalformedURLException, JSONException {
+//        SmartMeService sm = new SmartMeService();
+//        // sm.checkConnection();
+//        // sm.putMethode("/api/Devices/5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
+//        // sm.getMethode("/api/Devices/", "");
+//       // sm.getLightStatus("5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
+//    }
 }

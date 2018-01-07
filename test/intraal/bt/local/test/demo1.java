@@ -5,24 +5,22 @@
  */
 package intraal.bt.local.test;
 
-import intraal.bt.algo.uc1.OnePersonLokation;
-
 /**
  *
  * @author turna
  */
-public class runLocation {
-    
-    OnePersonLokation opl = new OnePersonLokation();
+public class demo1 {
     
     
-     public void runLocation()throws Exception {
-         opl.locationOfPerson();
-    }
     
-
     public static void main(String[] args) throws Exception {
-        new runLocation().runLocation();
+        runNightLight rnl = new runNightLight();
+        
+        // Start Sensor
+        
+        // Start Algo
+        rnl.runNightLight();
+        
     }
-
+    
 }

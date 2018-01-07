@@ -16,7 +16,7 @@ public class Settings {
     private int ambientLightOn = 300;
     private int temperaturToHigh = 2500;
     private int temperaturToLow = 2100;
-    private String startNightPhase = "18:00";
+    private String startNightPhase = "17:00";
     private String endNightPhase = "10:00";
     private boolean demoModus = false;
 

@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package intraal.bt.config.connection.twilio;
+package intraal.bt.algo.uc1;
 
 /**
  *
  * @author turna
  */
-public class inboudCall {
+public class ActivityCheck {
     
 }

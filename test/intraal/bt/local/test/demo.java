@@ -17,7 +17,7 @@ public class demo {
         runMotion rm = new runMotion();
         runPassage rp = new runPassage();
         runLocation rl = new runLocation();
-      //  runNightLight rnl = new runNightLight();
+        runNightLight rnl = new runNightLight();
         
         // Start Sensor
         rm.detectMotion();
@@ -25,7 +25,7 @@ public class demo {
         
         // Start Algo
         rl.runLocation();
-       // rnl.runNightLight();
+        rnl.runNightLight();
         
     }
     

@@ -6,21 +6,23 @@ package intraal.bt.config.connection.twilio;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Call;
 import com.twilio.type.PhoneNumber;
+import intraal.bt.config.connection.ConnectionParameters;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 
 
-public class outCall {
+public class OutCall {
   // Find your Account Sid and Token at twilio.com/user/account
   public static final String ACCOUNT_SID = "ACfdb500575b3af7eb470252c03f511c5d";
   public static final String AUTH_TOKEN = "235d5b27262f7fb0f0634bc7a5a810bc";
+  private static final ConnectionParameters cp = new ConnectionParameters();
 
-  public static void main(String[] args) throws URISyntaxException {
-    Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+  public static void makeOutCall(String sendTo, String telefon) {
+    Twilio.init(cp.getTwilio_sid(), cp.getTwilio_auth_token());
+    
+    URI uri = URI.create("http://intraal.com/voicemessage/message3.xml");
 
-    Call call = Call.creator(new PhoneNumber("+41788312364"), new PhoneNumber("+41445051051"),
-        new URI("http://demo.twilio.com/docs/voice.xml")).create();
+    Call call = Call.creator(new PhoneNumber(sendTo), new PhoneNumber(telefon), uri).create();
 
     System.out.println(call.getSid());
   }

@@ -22,6 +22,14 @@ public class ConnectionParameters {
     private final String wifiPw = "nespresso";
 
     /*
+    E-Mail
+    */
+    private final String EmailUser = "message@intraal.com";
+    private final String EmailPW = "pJYiRVsx";
+    private final String EmailSender ="message@intraal.com";
+    private final String EmailSmptAuth = "asmtp.mail.hostpoint.ch"; //mail.smtp.auth
+    
+    /*
    MQTT Broker (root) connection
      */
     private final String userName = "intraalpi";
@@ -44,8 +52,10 @@ public class ConnectionParameters {
     private final String SMPassword = "f6PEz6QsTZnn";
     private final String SMauthString = SMname + ":" + SMPassword;
     
-    private final String twilio_sid = "ACfdb500575b3af7eb470252c03f511c5d";
-    private final String twilio_auth_token = "235d5b27262f7fb0f0634bc7a5a810bc";
+    private final static String twilio_sid = "ACfdb500575b3af7eb470252c03f511c5d";
+    private final static String twilio_auth_token = "235d5b27262f7fb0f0634bc7a5a810bc";
+    private final static String twilio_voice_nummer = "41445051051";
+    private final static String twilio_sms_nummer = "41798072618";
     
     /*
     SIOT Input Key's
@@ -216,7 +226,34 @@ public class ConnectionParameters {
     public String getTwilio_auth_token() {
         return twilio_auth_token;
     }
-     
+
+    public static String getTwilio_voice_nummer() {
+        return twilio_voice_nummer;
+    }
+    
+    public static String getTwilio_sms_nummer() {
+        return twilio_sms_nummer;
+    }
+    
+    /*
+    E-Mail getter's
+    */
+
+    public String getEmailSender() {
+        return EmailSender;
+    }
+
+    public String getEmailPW() {
+        return EmailPW;
+    }
+
+    public String getEmailSmptAuth() {
+        return EmailSmptAuth;
+    }
+
+    public String getEmailUser() {
+        return EmailUser;
+    }
      
     /*
     SIOT Key getter's
