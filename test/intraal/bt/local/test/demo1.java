@@ -14,13 +14,18 @@ public class demo1 {
     
     
     public static void main(String[] args) throws Exception {
+        runMotion rm = new runMotion();
+        runPassage rp = new runPassage();
+        runLocation rl = new runLocation();
         runNightLight rnl = new runNightLight();
         
         // Start Sensor
+        rm.detectMotion();
+        rp.detectPassage();
         
         // Start Algo
+        rl.runLocation();
         rnl.runNightLight();
-        
     }
     
 }

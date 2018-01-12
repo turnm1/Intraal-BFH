@@ -9,7 +9,7 @@ package intraal.bt.system.settings;
  *
  * @author turna
  */
-public class Kontaktpersonen {
+public class Kontaktpersonen1 {
     
     private String name;
     private String prename;
@@ -67,7 +67,7 @@ public class Kontaktpersonen {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public String getTelefon() {
         return telefon;
     }

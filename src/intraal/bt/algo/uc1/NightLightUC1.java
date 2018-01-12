@@ -187,7 +187,7 @@ public class NightLightUC1 implements MqttCallback {
                     }
                 }
             }
-        } else {
+        } else if (isNight() == false){
             sme.switchLightStatus(con.getSmBadPlugUID(), "false");
             publishLightLokationSwitch(con.getSmBadPlugUID(), "false");
             sme.switchLightStatus(con.getSmKüchePlugUID(), "false");

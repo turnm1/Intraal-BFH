@@ -87,7 +87,7 @@ public class SchlafzimmerBett1 implements MqttCallback {
 
                     if (weight >= 20000 && flag != 0) {
                         flag = 0;
-                        message.setPayload(("liegt").getBytes());
+                        message.setPayload(("On the bed").getBytes());
                         message.setRetained(true);
                         message.setQos(0);
                         c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);
@@ -105,7 +105,7 @@ public class SchlafzimmerBett1 implements MqttCallback {
 
                     if (weight < 15000 && flag != 1) {
                         flag = 1;
-                        message.setPayload(("frei").getBytes());
+                        message.setPayload(("Not on the bed").getBytes());
                         message.setRetained(true);
                         message.setQos(0);
                         c.publish(con.getClientIDValueTopic(MODUL, ROOM, UID), message);

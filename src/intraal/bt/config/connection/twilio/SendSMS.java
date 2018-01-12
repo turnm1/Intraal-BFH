@@ -6,11 +6,9 @@
 package intraal.bt.config.connection.twilio;
 
 import com.twilio.Twilio;
-import com.twilio.rest.api.v2010.account.Call;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import intraal.bt.config.connection.ConnectionParameters;
-import java.net.URI;
 /**
  *
  * @author turna
@@ -20,12 +18,12 @@ public class SendSMS {
   ConnectionParameters cp = new ConnectionParameters();
  
   
-  public void sendSMS(String sendTo, String text, String telefon){
+  public void sendSMS(String sendTo, String text, String sendFrom){
     Twilio.init(cp.getTwilio_sid(), cp.getTwilio_auth_token());
     
     Message message = Message
         .creator(new PhoneNumber(sendTo), // to
-                 new PhoneNumber(telefon), // from
+                 new PhoneNumber(sendFrom), // from
                  text)
         .create();
 

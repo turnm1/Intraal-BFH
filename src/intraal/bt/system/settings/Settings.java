@@ -19,6 +19,11 @@ public class Settings {
     private String startNightPhase = "17:00";
     private String endNightPhase = "10:00";
     private boolean demoModus = false;
+    private int warnintTime = 15;
+
+    public int getWarnintTime() {
+        return warnintTime;
+    }
 
     public int getTemperaturToLow() {
         return temperaturToLow;

@@ -9,15 +9,16 @@ package intraal.bt.system.settings;
  *
  * @author turna
  */
-public class Kontaktpersonen {
+public class BewohnerInformation {
     
-    private String name;
-    private String prename;
-    private String streetAndNr;
-    private String plz;
-    private String city;
-    private String email = "turnamete@hotmail.com";
-    private String telefon = "41788312364";
+    private String name = "Brönnimann";
+    private String prename = "Elisabeth";
+    private String streetAndNr = "Quellgasse 21";
+    private String plz = "2501";
+    private String city = "Biel";
+    private String email = "elisabeth@bfh.ch";
+    private String telefon = "41323216111";
+
 
 
     public String getName() {
@@ -67,7 +68,7 @@ public class Kontaktpersonen {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public String getTelefon() {
         return telefon;
     }

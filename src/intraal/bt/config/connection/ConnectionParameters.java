@@ -24,9 +24,9 @@ public class ConnectionParameters {
     /*
     E-Mail
     */
-    private final String EmailUser = "message@intraal.com";
-    private final String EmailPW = "pJYiRVsx";
-    private final String EmailSender ="message@intraal.com";
+    private final String EmailUser = "meldung@intraal.com";
+    private final String EmailPW = "GEz8BBh6";
+    private final String EmailSender ="meldung@intraal.com";
     private final String EmailSmptAuth = "asmtp.mail.hostpoint.ch"; //mail.smtp.auth
     
     /*
@@ -123,6 +123,16 @@ public class ConnectionParameters {
     private final String tgWohnzimmerIP = "10.0.233.47";
     private final String tgBettIP = "10.0.233.48";
     private final String tgEingang2IP = "10.0.233.49";
+    
+    // SensorModul MasterUID's
+    private final String mUIDEingang = "6e7NrQ";
+    private final String mUIDEingang2 = "6jDUPU";
+    private final String mUIDKüche = "6e88VL";
+    private final String mUIDBad = "6QFxcy";
+    private final String mUIDSchalfzimmer = "62B7TB";
+    private final String mUIDBett = "6CtMfr";
+    private final String mUIDWohnzimmer = "5W5jVE";
+    
     // EINGANG UID's
     private final String modulEingang = "Eingang";
     private final String eingangMotionUID = "wtd";
@@ -234,6 +244,7 @@ public class ConnectionParameters {
     public static String getTwilio_sms_nummer() {
         return twilio_sms_nummer;
     }
+    
     
     /*
     E-Mail getter's
@@ -429,6 +440,36 @@ public class ConnectionParameters {
     /*
     BFH getter Tinkerforge Sensors
      */
+// get Master UID's
+
+    public String getmUIDBad() {
+        return mUIDBad;
+    }
+
+    public String getmUIDBett() {
+        return mUIDBett;
+    }
+
+    public String getmUIDEingang2() {
+        return mUIDEingang2;
+    }
+
+    public String getmUIDEingang() {
+        return mUIDEingang;
+    }
+
+    public String getmUIDKüche() {
+        return mUIDKüche;
+    }
+
+    public String getmUIDSchalfzimmer() {
+        return mUIDSchalfzimmer;
+    }
+
+    public String getmUIDWohnzimmer() {
+        return mUIDWohnzimmer;
+    }
+   
 // get Modul name's
     public String getModulBad() {    
         return modulBad;
