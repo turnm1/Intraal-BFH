@@ -5,13 +5,8 @@
  */
 package intraal.bt.algo.uc1;
 
-import com.tinkerforge.BrickletAmbientLightV2;
-import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
-import intraal.bt.config.connection.siot.SiotDashboardInput;
-import intraal.bt.config.mqtt.MQTTCommunication;
-import intraal.bt.config.mqtt.MQTTParameters;
-import java.net.URI;
+import intraal.bt.config.connection.Connections;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -22,70 +17,34 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class OnePersonLokation implements MqttCallback {
 
-    BrickletAmbientLightV2 tinkerforg;
-    ConnectionParameters con;
-    IPConnection ipcon;
-    MqttMessage message;
-    MQTTParameters p;
-    MQTTCommunication c;
-    SiotDashboardInput sdi;
+    ConnectionParameters cp;
+    Connections con;
 
-    private String passageDetected = "0"; // war static 16.12.17
-
-    /////////////////// EDIT HERE ///////////////////////
+    private String passageDetected = "0";
+    
     private final String UID = "OnePerson";
     private final String USECASENR = "Location";
     private final String USECASE = "Helper";
-    /////////////////////////////////////////////////////
 
-    /*
-    Connection with WLAN & MQTT Raspberry Pi Broker
-     */
-    private void connectMQTT() throws Exception {
-        con = new ConnectionParameters();
-        sdi = new SiotDashboardInput();
-        c = new MQTTCommunication();
-        p = new MQTTParameters();
-        p.setClientID(con.getClientIDTopic(UID));
-        p.setUserName(con.getUserName());
-        p.setPassword(con.getPassword());
-        p.setIsCleanSession(false);
-        p.setIsLastWillRetained(true);
-        p.setLastWillMessage("offline".getBytes());
-        p.setLastWillQoS(0);
-        p.setServerURIs(URI.create(con.getBrokerConnection()));
-        p.setWillTopic(con.getLastWillConnectionTopic(USECASE, USECASENR, UID));
-        p.setMqttCallback(this);
-        c.connect(p);
-        c.publishActualWill("online".getBytes());
-        p.getLastWillMessage();
-    }
 
     public void locationOfPerson() throws Exception {
-        connectMQTT();
-        c.subscribe("Gateway/10.0.233.51/#", 0);
+        con = new Connections();
+        con.getMQTTconnection(USECASE, USECASENR, UID);
+        con.subscribeMQTT("#/");
     }
 
     private void pushLocation(String location) throws Exception{
-        message = new MqttMessage();
-        message.setRetained(true);
-        message.setQos(0);
-        message.setPayload((location).getBytes());
-            sdi.setInputKey(con.getService_location());
-            sdi.setInputMessage(location); 
-            sdi.sendInput();
-                if (location.equals("Haus verlassen")){
-                    sdi.setInputKey(con.getService_inOrOut()); 
-                    sdi.setInputMessage(location);
-                    sdi.sendInput();
-                } else if (location.equals("Eingang")){
-                    location = "Zu Hause";
-                    sdi.setInputKey(con.getService_inOrOut());   
-                    sdi.setInputMessage(location);           
-                    sdi.sendInput();
-                }
-        c.publish(con.getClientIDValueTopic(USECASE, USECASENR, UID), message);
-        System.out.println("Location Algo Message: "+message);
+        con = new Connections();
+        con.getMQTTconnection(USECASE, USECASENR, UID);
+        con.sendMQTTmessage(USECASE, USECASENR, UID, location);
+        con.sendSIOTmessage(cp.getSIOT_SERVICE_INPUT_LOCATION_KEY(), location);
+            if (location.equals("Haus verlassen")){
+                con.sendSIOTmessage(UID, location);
+            } else if (location.equals("Eingang")){
+                location = "Zu Hause";
+                con.sendSIOTmessage(cp.getSIOT_SERVICE_INPUT_LOCATION_KEY(), location);
+            }
+        System.out.println("Position of Person: " + location);
     }
     
     @Override
@@ -173,15 +132,14 @@ public class OnePersonLokation implements MqttCallback {
                                   
         }
     }
-
+    
     @Override
     public void connectionLost(Throwable cause) {
-        System.out.println(" =========== Connection Lost =========== ");
+        System.out.println(" ===== MQTT VERBINDUNG UNTERBROCKEN! ===== ");
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
-        System.out.println(" =========== Delivery Completed =========== ");
+        System.out.println(" ===== MQTT MESSAGE GESENDET! ===== ");
     }
-
 }

@@ -1,17 +1,14 @@
-/*
+/* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package intraal.bt.algo.uc1;
 
-import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
+import intraal.bt.config.connection.Connections;
 import intraal.bt.config.connection.rest.SmartMeService;
-import intraal.bt.config.mqtt.MQTTCommunication;
-import intraal.bt.config.mqtt.MQTTParameters;
-import intraal.bt.system.settings.Settings;
-import java.net.URI;
+import intraal.bt.system.settings.IntraalEinstellungen;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,71 +23,36 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class NightLightUC1 implements MqttCallback {
 
-    ConnectionParameters con;
-    IPConnection ipcon;
-    MqttMessage message;
-    MQTTParameters p;
-    Settings s;
-    SmartMeService sme;
-    MQTTCommunication c;
+    ConnectionParameters cp;
+    Connections con;
 
-    /////////////////// EDIT HERE ///////////////////////
-    private final String UID = "OnePersonLocation";
-    private final String USECASENR = "One";
+    private final String UID = "OnePerson";
+    private final String USECASENR = "Location";
     private final String USECASE = "Usecase";
-    /////////////////////////////////////////////////////
 
     private static boolean isNigh;
 
-    /*
-    Connection with WLAN & MQTT Raspberry Pi Broker
-     */
-    private void connectMQTT() throws Exception {
-        con = new ConnectionParameters();
-        sme = new SmartMeService();
-        c = new MQTTCommunication();
-        s = new Settings();
-        p = new MQTTParameters();
-        p.setClientID(con.getClientIDTopic(UID));
-        p.setUserName(con.getUserName());
-        p.setPassword(con.getPassword());
-        p.setIsCleanSession(false);
-        p.setIsLastWillRetained(true);
-        p.setLastWillMessage("offline".getBytes());
-        p.setLastWillQoS(0);
-        p.setServerURIs(URI.create(con.getBrokerConnection()));
-        p.setWillTopic(con.getLastWillConnectionTopic(USECASE, USECASENR, UID));
-        p.setMqttCallback(this);
-        c.connect(p);
-        c.publishActualWill("online".getBytes());
-        p.getLastWillMessage();
-    }
-
-    public void nightLight() throws Exception {
-        connectMQTT();
-        //      c.subscribe("Gateway/10.0.233.51/#", 0);
-        c.subscribe("Gateway/10.0.233.51/Helper/#", 0);
+    public void runNightLight() throws Exception {
+        con = new Connections();
+        con.getMQTTconnection(USECASE, USECASENR, UID);
+        con.subscribeMQTT("#/");
     }
 
     private void publishLightLokationSwitch(String plugUID, String Switch) {
         String location = plugUID;
-        if (plugUID.equals(con.getSmWohnzimmerPlugUID())) {
+        if (plugUID.equals(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER())) {
             location = "Wohnzimmer";
-        } else if (plugUID.equals(con.getSmSchlafzimmerPlugUID())) {
+        } else if (plugUID.equals(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER())) {
             location = "Schlafzimmer";
-        } else if (plugUID.equals(con.getSmWohnzimmerPlugUID())) {
+        } else if (plugUID.equals(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER())) {
             location = "Eingang";
-        } else if (plugUID.equals(con.getSmBadPlugUID())) {
+        } else if (plugUID.equals(cp.getSMART_ME_PLUG_KEY_BAD())) {
             location = "Bad";
-        } else if (plugUID.equals(con.getSmKüchePlugUID())) {
+        } else if (plugUID.equals(cp.getSMART_ME_PLUG_KEY_KÜCHE())) {
             location = "Küche";
         }
-        message = new MqttMessage();
-        message.setRetained(true);
-        message.setQos(0);
-        message.setPayload((location + "=" + Switch).getBytes());
-        c.publish(con.getClientIDValueTopic(USECASE, USECASENR, UID), message);
-        System.out.println(con.getClientIDValueTopic(USECASE, USECASENR, UID) + ": " + message);
+        String nachricht = location + "=" + Switch;
+        con.sendMQTTmessage(USECASE, USECASENR, UID, nachricht);
     }
 
     private Date parseDate(String date) {
@@ -104,14 +66,15 @@ public class NightLightUC1 implements MqttCallback {
     }
 
     private boolean isNight() {
+        IntraalEinstellungen ie = new IntraalEinstellungen();
         Calendar now = Calendar.getInstance();
         isNigh = false;
 
         int hour = now.get(Calendar.HOUR_OF_DAY); // Get hour in 24 hour format
         int minute = now.get(Calendar.MINUTE);
         Date date = parseDate(hour + ":" + minute);
-        Date startTime = parseDate(s.getStartNightPhase());
-        Date endTime = parseDate(s.getEndNightPhase());
+        Date startTime = parseDate(ie.getStartNightPhase());
+        Date endTime = parseDate(ie.getEndNightPhase());
         if (date.after(startTime) || date.before(endTime)) {
             isNigh = true;
         }
@@ -120,6 +83,7 @@ public class NightLightUC1 implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
+        SmartMeService sme = new SmartMeService();
         if (isNight() == true) {
 
             if (topic.endsWith("value")) {
@@ -130,83 +94,93 @@ public class NightLightUC1 implements MqttCallback {
                 if (locationAlgo.equals("Helper")) {
 
                     if (messageVal.equals("Schlafzimmer")) {
-                        // light on in Wohnzimmer, Schlafzimmer
-                        sme.switchLightStatus(con.getSmWohnzimmerPlugUID(), "true");
-                        publishLightLokationSwitch(con.getSmWohnzimmerPlugUID(), "true");
-                        sme.switchLightStatus(con.getSmSchlafzimmerPlugUID(), "true");
-                        publishLightLokationSwitch(con.getSmSchlafzimmerPlugUID(), "true");
-                        // light off in Bad
-                        sme.switchLightStatus(con.getSmBadPlugUID(), "false");
-                        publishLightLokationSwitch(con.getSmBadPlugUID(), "false");
-                        sme.switchLightStatus(con.getSmKüchePlugUID(), "false");
-                        publishLightLokationSwitch(con.getSmKüchePlugUID(), "false");
+                        // light on 
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "true");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "true");
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "true");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "true");
+                        // light off
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_BAD(), "false");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_BAD(), "false");
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_KÜCHE(), "false");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_KÜCHE(), "false");
                     } else if (messageVal.equals("Wohnzimmer")) {
-                        // light on in schlafz, wohnz, eingang
-                        sme.switchLightStatus(con.getSmWohnzimmerPlugUID(), "true");
-                        publishLightLokationSwitch(con.getSmWohnzimmerPlugUID(), "true");
-                        sme.switchLightStatus(con.getSmSchlafzimmerPlugUID(), "true");
-                        publishLightLokationSwitch(con.getSmSchlafzimmerPlugUID(), "true");
-                        // light off in bad
-                        sme.switchLightStatus(con.getSmBadPlugUID(), "false");
-                        publishLightLokationSwitch(con.getSmBadPlugUID(), "false");
-                        sme.switchLightStatus(con.getSmKüchePlugUID(), "false");
-                        publishLightLokationSwitch(con.getSmKüchePlugUID(), "false");
+                        // light on 
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "true");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "true");
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "true");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "true");
+                        // light off 
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_BAD(), "false");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_BAD(), "false");
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_KÜCHE(), "false");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_KÜCHE(), "false");
                     } else if (messageVal.equals("Eingang")) {
-                        // light on in bad, eingang, wohnz
-                        sme.switchLightStatus(con.getSmBadPlugUID(), "true");
-                        publishLightLokationSwitch(con.getSmBadPlugUID(), "true");
-                        sme.switchLightStatus(con.getSmSchlafzimmerPlugUID(), "true");
-                        publishLightLokationSwitch(con.getSmSchlafzimmerPlugUID(), "true");
-                        sme.switchLightStatus(con.getSmWohnzimmerPlugUID(), "true");
-                        publishLightLokationSwitch(con.getSmWohnzimmerPlugUID(), "true");
-                        sme.switchLightStatus(con.getSmKüchePlugUID(), "true");
-                        publishLightLokationSwitch(con.getSmKüchePlugUID(), "true");
-                        // light off in keiner
+                        // light on 
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_BAD(), "true");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_BAD(), "true");
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "true");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "true");
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "true");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "true");
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_KÜCHE(), "true");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_KÜCHE(), "true");
+                        // light off 
                     } else if (messageVal.equals("Bad")) {
-                        // light on in Eingang, Bad
-                        sme.switchLightStatus(con.getSmKüchePlugUID(), "true");
-                        publishLightLokationSwitch(con.getSmKüchePlugUID(), "true");
-                        sme.switchLightStatus(con.getSmWohnzimmerPlugUID(), "true");
-                        publishLightLokationSwitch(con.getSmWohnzimmerPlugUID(), "true");
-                        sme.switchLightStatus(con.getSmBadPlugUID(), "true");
-                        publishLightLokationSwitch(con.getSmBadPlugUID(), "true");
-                        // light off in schlafz, wohnz
-                        sme.switchLightStatus(con.getSmSchlafzimmerPlugUID(), "false");
-                        publishLightLokationSwitch(con.getSmSchlafzimmerPlugUID(), "false");
-                    } else if (messageVal.equals("kueche")) {
-                        // light on in Eingang, Bad
-                        sme.switchLightStatus(con.getSmKüchePlugUID(), "true");
-                        publishLightLokationSwitch(con.getSmKüchePlugUID(), "true");
-                        sme.switchLightStatus(con.getSmWohnzimmerPlugUID(), "true");
-                        publishLightLokationSwitch(con.getSmWohnzimmerPlugUID(), "true");
-                        // light off in schlafz, wohnz
-                        sme.switchLightStatus(con.getSmBadPlugUID(), "false");
-                        publishLightLokationSwitch(con.getSmBadPlugUID(), "false");
-                        sme.switchLightStatus(con.getSmSchlafzimmerPlugUID(), "false");
-                        publishLightLokationSwitch(con.getSmSchlafzimmerPlugUID(), "false");
+                        // light on 
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "true");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "true");
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_BAD(), "true");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_BAD(), "true");
+                        // light off 
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_KÜCHE(), "false");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_KÜCHE(), "false");
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "false");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "false");
+                    } else if (messageVal.equals("Kuche")) {
+                        // light on 
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_KÜCHE(), "true");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_KÜCHE(), "true");
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "true");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "true");
+                        // light off 
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_BAD(), "false");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_BAD(), "false");
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "false");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "false");
+                    } else if (messageVal.equals("On the bed")) {
+                        // light on 
+                        // light off 
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_KÜCHE(), "false");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_KÜCHE(), "false");
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "false");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "false");
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_BAD(), "false");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_BAD(), "false");
+                        sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "false");
+                        publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "false");
                     }
                 }
             }
         } else if (isNight() == false){
-            sme.switchLightStatus(con.getSmBadPlugUID(), "false");
-            publishLightLokationSwitch(con.getSmBadPlugUID(), "false");
-            sme.switchLightStatus(con.getSmKüchePlugUID(), "false");
-            publishLightLokationSwitch(con.getSmKüchePlugUID(), "false");
-            sme.switchLightStatus(con.getSmSchlafzimmerPlugUID(), "false");
-            publishLightLokationSwitch(con.getSmSchlafzimmerPlugUID(), "false");
-            sme.switchLightStatus(con.getSmWohnzimmerPlugUID(), "false");
-            publishLightLokationSwitch(con.getSmWohnzimmerPlugUID(), "false");
+            sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_BAD(), "false");
+            publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_BAD(), "false");
+            sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_KÜCHE(), "false");
+            publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_KÜCHE(), "false");
+            sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "false");
+            publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "false");
+            sme.switchLightStatus(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "false");
+            publishLightLokationSwitch(cp.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "false");
         }
     }
 
     @Override
     public void connectionLost(Throwable cause) {
-        System.out.println(" =========== Connection Lost =========== " + cause);
+        System.out.println(" ===== MQTT VERBINDUNG UNTERBROCKEN! ===== ");
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
-        System.out.println(" =========== Delivery Completed =========== ");
+        System.out.println(" ===== MQTT MESSAGE GESENDET! ===== ");
     }
-
 }

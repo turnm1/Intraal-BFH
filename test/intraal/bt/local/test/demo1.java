@@ -16,16 +16,23 @@ public class demo1 {
     public static void main(String[] args) throws Exception {
         runMotion rm = new runMotion();
         runPassage rp = new runPassage();
+        runBed rb = new runBed();
         runLocation rl = new runLocation();
         runNightLight rnl = new runNightLight();
+        runBedActivity rba = new runBedActivity();
+        
         
         // Start Sensor
         rm.detectMotion();
         rp.detectPassage();
+        rb.detectionBed();
         
         // Start Algo
         rl.runLocation();
         rnl.runNightLight();
+      //  rba.runBedActivity();
     }
+    
+    
     
 }

@@ -30,10 +30,10 @@ public class SmartMeService {
 
     ConnectionParameters cp = new ConnectionParameters();
 
-    String webPage = cp.getSMwebPage();
-    String name = cp.getSMname();
-    String password = cp.getSMPassword();
-    String authString = cp.getSMauthString();
+    String webPage = cp.getSMART_ME_WEBSERVICE();
+    String name = cp.getSMART_ME_BENUTZER();
+    String password = cp.getSMART_ME_PW();
+    String authString = cp.getSMART_ME_AUTH();
 
     public void checkConnection() throws MalformedURLException, IOException {
         System.out.println("*** BEGIN ***");
@@ -81,8 +81,6 @@ public class SmartMeService {
     }
 
     public void switchLightStatus(String ID, String onOffswitch) throws MalformedURLException, IOException, UnirestException {
-      //  System.out.println("*** BEGIN ***");
-      //  System.out.println(webPage + "/api/Devices/" + ID);
         byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
         String authStringEnc = new String(authEncBytes);
         HttpRequest request = Unirest.put(webPage + "/api/Devices/" + ID)
@@ -91,8 +89,6 @@ public class SmartMeService {
                 .header("Authorization", "Basic " + authStringEnc)
                 .queryString("switchState", onOffswitch);
         HttpResponse<String> jsonResponse = request.asString();
-      //  System.out.println("Response Status Code: " + jsonResponse.getStatus());
-      //  System.out.println("*** END ***");
     }
 
     
@@ -127,11 +123,4 @@ public class SmartMeService {
         System.out.println("*** END ***");
     }
 
-//    public static void main(String[] args) throws IOException, UnirestException, MalformedURLException, JSONException {
-//        SmartMeService sm = new SmartMeService();
-//        // sm.checkConnection();
-//        // sm.putMethode("/api/Devices/5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
-//        // sm.getMethode("/api/Devices/", "");
-//       // sm.getLightStatus("5b9b3fea-cc8d-45ad-92b3-9caf3be725bc");
-//    }
 }

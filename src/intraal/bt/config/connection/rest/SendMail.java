@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Properties;
 import javax.mail.Authenticator;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -83,7 +84,7 @@ public class SendMail {
             Transport.send(msg);
  
         }
-        catch (Exception e) {
+        catch (MessagingException e) {
             e.printStackTrace( );
         }
     }
@@ -99,6 +100,7 @@ public class SendMail {
             this.password = password;
         }
  
+        @Override
         protected PasswordAuthentication getPasswordAuthentication() {
             return new PasswordAuthentication(this.user, this.password);
         }
@@ -107,6 +109,6 @@ public class SendMail {
     public static void sendMail(String subject, String text, String reciverEmail){
         ConnectionParameters cp = new ConnectionParameters();
               
-        new SendMail().initMail(cp.getEmailSmptAuth(), cp.getEmailUser(), cp.getEmailPW(), cp.getEmailSender(), reciverEmail, subject, text);
+        new SendMail().initMail(cp.getEMAIL_SMPT_AUTH(), cp.getEMAIL_BENUTZER(), cp.getEMAIL_PW(), cp.getEMAIL(), reciverEmail, subject, text);
     }
 }

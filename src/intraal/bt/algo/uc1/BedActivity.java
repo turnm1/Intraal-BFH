@@ -5,12 +5,8 @@
  */
 package intraal.bt.algo.uc1;
 
-import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
-import intraal.bt.config.connection.siot.SiotDashboardInput;
-import intraal.bt.config.mqtt.MQTTCommunication;
-import intraal.bt.config.mqtt.MQTTParameters;
-import java.net.URI;
+import intraal.bt.config.connection.Connections;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -21,72 +17,30 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class BedActivity implements MqttCallback {
 
-    ConnectionParameters con;
-    IPConnection ipcon;
-    MqttMessage message;
-    MQTTParameters p;
-    MQTTCommunication c;
-    SiotDashboardInput sdi;
+    ConnectionParameters cp;
+    Connections con;
+    
+    private static int LoadCell1, LoadCell2, LoadCell3, LoadCell4 = 0;
 
-    private static int LoadCell1 = 0;
-    private static int LoadCell2 = 0;
-    private static int LoadCell3 = 0;
-    private static int LoadCell4 = 0;
-
-    /////////////////// EDIT HERE ///////////////////////
     private final String UID = "OnePerson";
     private final String USECASENR = "BedActivity";
     private final String USECASE = "Helper";
-    /////////////////////////////////////////////////////
-
-    /*
-    Connection with WLAN & MQTT Raspberry Pi Broker
-     */
-    private void connectMQTT() throws Exception {
-        con = new ConnectionParameters();
-        sdi = new SiotDashboardInput();
-        c = new MQTTCommunication();
-        p = new MQTTParameters();
-        p.setClientID(con.getClientIDTopic(UID));
-        p.setUserName(con.getUserName());
-        p.setPassword(con.getPassword());
-        p.setIsCleanSession(false);
-        p.setIsLastWillRetained(true);
-        p.setLastWillMessage("offline".getBytes());
-        p.setLastWillQoS(0);
-        p.setServerURIs(URI.create(con.getBrokerConnection()));
-        p.setWillTopic(con.getLastWillConnectionTopic(USECASE, USECASENR, UID));
-        p.setMqttCallback(this);
-        c.connect(p);
-        c.publishActualWill("online".getBytes());
-        p.getLastWillMessage();
-    }
 
     public void bedActivity() throws Exception {
-        connectMQTT();
-        c.subscribe("Gateway/10.0.233.51/#", 0);
+        con = new Connections();
+        con.getMQTTconnection(USECASE, USECASENR, UID);
+        con.subscribeMQTT("#/");
     }
 
     private void OnBedOrNot() throws Exception{
         System.out.println(LoadCell1+LoadCell2+LoadCell3+LoadCell4);
         if (LoadCell1+LoadCell2+LoadCell3+LoadCell4 == 4){
-            pushLocation("On the bed");
-        } else {
-            pushLocation("Not on the bed");
-
+            String nachricht = "On the bed";
+            con.sendMQTTmessage(USECASE, USECASENR, UID, nachricht);
+        } else if (LoadCell1+LoadCell2+LoadCell3+LoadCell4 == 0){
+            String nachricht = "Not on the bed";
+            con.sendMQTTmessage(USECASE, USECASENR, UID, nachricht);
         }
-    }
-    
-    private void pushLocation(String onBedOrNot) throws Exception{
-        message = new MqttMessage();
-        message.setRetained(true);
-        message.setQos(0);
-        message.setPayload((onBedOrNot).getBytes());
-//            sdi.setInputKey(con.getService_location());
-//            sdi.setInputMessage(location); 
-//            sdi.sendInput();
-        c.publish(con.getClientIDValueTopic(USECASE, USECASENR, UID), message);
-        System.out.println("Bed Activity Helper Message: "+message);
     }
     
     @Override
@@ -135,12 +89,11 @@ public class BedActivity implements MqttCallback {
 
     @Override
     public void connectionLost(Throwable cause) {
-        System.out.println(" =========== Connection Lost =========== ");
+        System.out.println(" ===== MQTT VERBINDUNG UNTERBROCKEN! ===== ");
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
-        System.out.println(" =========== Delivery Completed =========== ");
+        System.out.println(" ===== MQTT MESSAGE GESENDET! ===== ");
     }
-
 }

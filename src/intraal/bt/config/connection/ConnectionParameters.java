@@ -5,630 +5,446 @@
  */
 package intraal.bt.config.connection;
 
+
 /**
  *
  * @author Turna
  */
 public class ConnectionParameters {
+      
+    /*
+    RASPBERRY PI, MQTT BROKER & WIFI
+     */
+    private final String RASPBERRY_PI_IP = "10.0.233.51";  // BFH Orginal IP: 10.0.233.172 / Passwort: nespresso //// HDI: 10.0.0.5 / PW: w0rkSmart! ******************************************************************************
+    private final String RASPBERRY_PI_BENUTZER = "intraalpi";
+    private final String RASPBERRY_PI_PW = "intraal";
+    private final String RASPBERRY_PI_MQTT_BROKER_TOPIC = "Gateway/" + RASPBERRY_PI_IP;
+    private final int RASPBERRY_PI_MQTT_BROKER_PORT = 1883; 
     
-    public ConnectionParameters() {
-        
-    }
+    private final String WIFI_PW = "nespresso";
 
     /*
-    Wifi Connections for Tinkerforge Sensor and Internet connection
-     */
-    private final String piIP = "10.0.233.51";  // BFH Orginal IP: 10.0.233.172 / Passwort: nespresso //// HDI: 10.0.0.5 / PW: w0rkSmart! ******************************************************************************
-    private final String wifiPw = "nespresso";
+    E-MAIL
+    */
+    private final String EMAIL_BENUTZER = "meldung@intraal.com";
+    private final String EMAIL_PW = "GEz8BBh6";
+    private final String EMAIL ="meldung@intraal.com";
+    private final String EMAIL_SMPT_AUTH = "asmtp.mail.hostpoint.ch"; //mail.smtp.auth
+    
+    /*
+    SIOT DASHBOARD
+    */
+    private final String SIOT_USER_AGENT = "Mozilla/5.0";
+    private final String SIOT_URL = "https://siot.net:12955";
+    private final String SIOT_LICENCE = "3DC9-90D5-8150-44DA-32FE-D81F-310D-5614";
+    
+    private final String SIOT_SERVICE_INPUT_INOROUT_KEY = "0fc55fa4-6b60-dfb3-202e-90f999c249ef";
+    private final String SIOT_SERVICE_INPUT_LOCATION_KEY = "a4b74c4f-6352-8524-4909-8670b4aa0d31";
+    private final String SIOT_SERVICE_INPUT_MESSAGE = "a09ab795-3451-8198-bab7-66b6013d9b60";
+    private final String SIOT_SERVICE_INPUT_ALARM = "81140b62-5560-59db-12b8-a19fbc93fda8";
+    
+    /*
+    SMART-ME
+    */
+    private final String SMART_ME_WEBSERVICE = "https://smart-me.com:443";
+    private final String SMART_ME_BENUTZER = "vnf1";
+    private final String SMART_ME_PW = "f6PEz6QsTZnn";
+    private final String SMART_ME_AUTH = SMART_ME_BENUTZER + ":" + SMART_ME_PW;
+    
+    private final String SMART_ME_PLUG_KEY_WOHNZIMMER = "5b9b3fea-cc8d-45ad-92b3-9caf3be725bc";
+    private final String SMART_ME_PLUG_KEY_SCHLAFZIMMER = "ca224bf7-bf6c-4d74-93fe-da4de71cdbb6";
+    private final String SMART_ME_PLUG_KEY_KÜCHE = "30d97038-8857-4df6-b0c3-cf7e27a820c3";
+    private final String SMART_ME_PLUG_KEY_BAD = "e3109c4e-b8f5-4687-88f6-38477d84f5ca";
+    
+    /*
+    TWILIO
+    */
+    //STATIC GEWESEN!
+    private final String TWILIO_SID = "ACfdb500575b3af7eb470252c03f511c5d";
+    private final String TWILIO_AUTH = "235d5b27262f7fb0f0634bc7a5a810bc";
+    private final String TWILIO_VOICE_NUMMER = "41445051051";
+    private final String TWILIO_SMS_NUMMER = "41798072618";
+    
+    /*
+    TINKERFORGE
+    */
+    private final String TINKERFORGE_MODUL_NAME_EINGANG = "Eingang";
+    private final String TINKERFORGE_MODUL_NAME_EINGANG2 = "Eingang2";
+    private final String TINKERFORGE_MODUL_NAME_BAD = "Bad";
+    private final String TINKERFORGE_MODUL_NAME_KÜCHE = "Küche";
+    private final String TINKERFORGE_MODUL_NAME_SCHLAFZIMMER = "Schlafzimmer";
+    private final String TINKERFORGE_MODUL_NAME_WOHNZIMMER = "Wohnzimmer";
+    private final String TINKERFORGE_MODUL_NAME_BETT = "Bett";
+    
+    private final int TINKERFORGE_PORT = 4223;
+    private final String TINKERFORGE_IP_EINGANG = "10.0.233.43";
+    private final String TINKERFORGE_IP_EINGANG2 = "10.0.233.49";
+    private final String TINKERFORGE_IP_KÜCHE = "10.0.233.44";
+    private final String TINKERFORGE_IP_BAD = "10.0.233.45";
+    private final String TINKERFORGE_IP_SCHLAFZIMMER = "10.0.233.46";
+    private final String TINKERFORGE_IP_WOHNZIMMER = "10.0.233.47";
+    private final String TINKERFORGE_IP_BETT = "10.0.233.48";
 
-    /*
-    E-Mail
-    */
-    private final String EmailUser = "meldung@intraal.com";
-    private final String EmailPW = "GEz8BBh6";
-    private final String EmailSender ="meldung@intraal.com";
-    private final String EmailSmptAuth = "asmtp.mail.hostpoint.ch"; //mail.smtp.auth
+    private final String TINKERFORGE_MODUL_UID_Eingang = "6e7NrQ";
+    private final String TINKERFORGE_MODUL_UID_EINGANG2 = "6jDUPU";
+    private final String TINKERFORGE_MODUL_UID_KÜCHE = "6e88VL";
+    private final String TINKERFORGE_MODUL_UID_BAD = "6QFxcy";
+    private final String TINKERFORGE_MODUL_UID_SCHLAFZIMMER = "62B7TB";
+    private final String TINKERFORGE_MODUL_UID_BETT = "6CtMfr";
+    private final String TINKERFORGE_MODUL_UID_WOHNZIMMER = "5W5jVE";
     
-    /*
-   MQTT Broker (root) connection
-     */
-    private final String userName = "intraalpi";
-    private final String password = "intraal";
-    private final String brokerTopic = "Gateway/" + piIP;
-    private final int brokerPort = 1883; 
-    
-    /*
-    SIOT Dashboard connection
-    */
-    private final String USER_AGENT = "Mozilla/5.0";
-    private final String URL = "https://siot.net:12955";
-    private final String Licence = "3DC9-90D5-8150-44DA-32FE-D81F-310D-5614";
-    
-    /*
-    Smart-me Plug connection
-    */
-    private final String SMwebPage = "https://smart-me.com:443";
-    private final String SMname = "vnf1";
-    private final String SMPassword = "f6PEz6QsTZnn";
-    private final String SMauthString = SMname + ":" + SMPassword;
-    
-    private final static String twilio_sid = "ACfdb500575b3af7eb470252c03f511c5d";
-    private final static String twilio_auth_token = "235d5b27262f7fb0f0634bc7a5a810bc";
-    private final static String twilio_voice_nummer = "41445051051";
-    private final static String twilio_sms_nummer = "41798072618";
-    
-    /*
-    SIOT Input Key's
-    */
-    // TinkerForge Sensor Status
-    private final String status_inputKey_bad = "c082d840-18ee-87d2-0012-12bfeabcee70";
-    private final String status_inputKey_eingang1 = "263cf0df-2dca-4217-baf4-a3ef07ff2bd7";
-    private final String status_inputKey_eingang2 = "b87745b9-c672-9eec-8ee3-cfa91ba2f3d1";
-    private final String status_inputKey_küche = "a8beef69-b67c-dd74-9d4c-3298b4d06452";
-    private final String status_inputKey_schlafz = "e67f9183-0b61-3062-81fe-5052892e9ed4";
-    private final String status_inputKey_wohnz = "13fcad5b-8770-7ac9-5f5b-156f807ba5bf";
-    // Ambient Lights Sensors
-    private final String al_inputKey_bad = "db187d13-ddff-849a-2ebd-a2ad08521752";
-    private final String al_inputKey_eingang = "636e7e8b-7a84-5ee4-f17b-b09118208c7e";
-    private final String al_inputKey_küche = "7ed4f12b-9860-3fd9-2fa7-9e67b1af052d";
-    private final String al_inputKey_schlafz = "da247c5d-dca1-ead6-4d28-3fd2fedfd8e1";
-    private final String al_inputKey_wohnz = "04c88ec4-65b5-dea1-eab1-ec9aba99968f";
-    // Motion Sensors
-    private final String m_inputKey_bad = "2e973949-329a-b170-ee0b-7d1cac9eb4c6";
-    private final String m_inputKey_eingang = "6d8c1115-0ed2-ada1-f446-d252fe6b1057";
-    private final String m_inputKey_küche = "ec2a0fe7-f93b-dd81-1362-ac97d9eb945c";
-    private final String m_inputKey_schlafz = "73b77f58-efc3-c44f-852d-2a146e03aaa4";
-    private final String m_inputKey_wohnz = "be7b666f-ce61-e7b9-117a-33c97a8588f5";
-    // Passage Sensors
-    private final String p_inputKey_bad = "446d18e6-852e-3a56-e416-47daa946e8a8";
-    private final String p_inputKey_eingang = "28791173-524b-b361-03d6-0005da6e3133";
-    private final String p_inputKey_küche = "77629175-5904-bfcd-f7ad-6ccb44b0b6b4";
-    private final String p_inputKey_schlafz = "065510eb-ffe2-5047-8819-08294ac246f0";
-    private final String p_inputKey_wohnz = "abd112ac-03e0-192c-8741-03964eca9686";
-    // Temperatur Sensors
-    private final String t_inputKey_bad = "05cdd07b-7f8e-fb06-e609-f408ce228ac0";
-    private final String t_inputKey_eingang = "50dbf5cb-d43c-2156-2f01-d678f51e102b";
-    private final String t_inputKey_küche = "10cb4aac-7f1b-12c0-e974-75a349d2b8af";
-    private final String t_inputKey_schlafz = "0bddc948-8b1f-f2ca-0dd8-ad02e2c20a62";
-    private final String t_inputKey_wohnz = "1b261905-0494-4ece-b19f-69a747c92c84";
-    // CO2 Sensors
-    private final String co2_inputKey_schlafz = "452ca9d5-5fae-5ce7-4727-6b8aa0b9fc33";
-    private final String co2_inputKey_wohnz = "f7d771ee-0501-0f45-9fab-014b1fd2c2d5";
-    // INTRAAL Services
-    private final String service_inOrOut = "0fc55fa4-6b60-dfb3-202e-90f999c249ef";
-    private final String service_location = "a4b74c4f-6352-8524-4909-8670b4aa0d31";
-    private final String service_message = "a09ab795-3451-8198-bab7-66b6013d9b60";
-    private final String service_alarm = "81140b62-5560-59db-12b8-a19fbc93fda8";
-    // INTRAAL EINSTELLUNGEN
-    private final String service_message_onOff = "45b1e09d751de54c88fd5679ffa98c17";
+    private final String TINKERFORGE_SENSOR_UID_EINGANG_MOTION = "wtd";
+    private final String TINKERFORGE_SENSOR_UID_EINGANG_PASSAGE = "tJ3";
+    private final String TINKERFORGE_SENSOR_UID_EINGANG_TEMPERATUR = "t73";
+    private final String TINKERFORGE_SENSOR_UID_EINGANG_AMBIENTELIGHT = "yg4";
 
-     /*
-   Smart-Me Plug
-     */
-    // Fix static UID's
-    private final String smWohnzimmerPlugUID = "5b9b3fea-cc8d-45ad-92b3-9caf3be725bc";
-    private final String smSchlafzimmerPlugUID = "ca224bf7-bf6c-4d74-93fe-da4de71cdbb6";
-    private final String smKüchePlugUID = "30d97038-8857-4df6-b0c3-cf7e27a820c3";
-    private final String smBadPlugUID = "e3109c4e-b8f5-4687-88f6-38477d84f5ca";
-    
-    /*
-   BFH Sensors
-     */
-    // Fix static IP's & UID's
-    private final int tgPort = 4223;
-    private final String tgEingangIP = "10.0.233.43";
-    private final String tgKücheIP = "10.0.233.44";  //BFH Orginal IP: 10.0.233.44 //// HDI IP: 192.168.0.181 ******************************************************************************
-    private final String tgBadIP = "10.0.233.45";    //BFH Orginal IP: 10.0.233.45 //// HDI IP: 192.168.0.106 or 10.0.0.52 or localhost ******************************************************************************
-    private final String tgSchlafzimmerIP = "10.0.233.46";
-    private final String tgWohnzimmerIP = "10.0.233.47";
-    private final String tgBettIP = "10.0.233.48";
-    private final String tgEingang2IP = "10.0.233.49";
-    
-    // SensorModul MasterUID's
-    private final String mUIDEingang = "6e7NrQ";
-    private final String mUIDEingang2 = "6jDUPU";
-    private final String mUIDKüche = "6e88VL";
-    private final String mUIDBad = "6QFxcy";
-    private final String mUIDSchalfzimmer = "62B7TB";
-    private final String mUIDBett = "6CtMfr";
-    private final String mUIDWohnzimmer = "5W5jVE";
-    
-    // EINGANG UID's
-    private final String modulEingang = "Eingang";
-    private final String eingangMotionUID = "wtd";
-    private final String eingangPassageUID = "tJ3";
-    private final String eingangTemperaturUID = "t73";
-    private final String eingangAmbientLightUID = "yg4";
-    /// Bad/WC UID's
-    private final String modulBad = "Bad";
-    private final String badMotionUID = "qtu";
-    private final String badPassageUID = "qsE"; // BFH: tHC  /////  HDI: qsE
-    private final String badTemperaturUID = "qvy";
-    private final String badAmbientLightUID = "yiJ";
-    // KÜCHE UID's
-    private final String modulKüche = "Küche";
-    private final String kücheMotionUID = "wrU";
-    private final String küchePassageUID = "tJN";
-    private final String kücheTemperaturUID = "t6W";
-    private final String kücheAmbientLightUID = "yiz";
-    // WOHNZIMMER UID's
-    private final String modulWohnzimmer = "Wohnzimmer";
-    private final String wohnzMotionUID = "wtF";
-    private final String wohnzPassageUID = "tJ9";
-    private final String wohnzTemperaturUID = "taL";
-    private final String wohnzAmbientLightUID = "yhZ";
-    private final String wohnzCO2UID = "x7e";
-    // SCHLAFZIMMER UID's
-    private final String modulSchlafzimmer = "Schlafzimmer";
-    private final String schlafzMotionUID = "wt9";
-    private final String schlafzPassageUID = "tJo";
-    private final String schlafzTemperaturUID = "tm1";
-    private final String schlafzAmbientLightUID = "yh9";
-    private final String schlafzCO2UID = "xtg";
+    private final String TINKERFORGE_SENSOR_UID_BAD_MOTION = "qtu";
+    private final String TINKERFORGE_SENSOR_UID_BAD_PASSAGE = "qsE";
+    private final String TINKERFORGE_SENSOR_UID_BAD_TEMPERATUR = "qvy";
+    private final String TINKERFORGE_SENSOR_UID_BAD_AMBIENTELIGHT = "yiJ";
 
-////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// NO EDIT ! /////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-    /*
-    MQTT Username & Password
-    */
-    public String getUserName(){
-        return userName;
+    private final String TINKERFORGE_SENSOR_UID_KÜCHE_MOTION = "wrU";
+    private final String TINKERFORGE_SENSOR_UID_KÜCHE_PASSAGE = "tJN";
+    private final String TINKERFORGE_SENSOR_UID_KÜCHE_TEMPERATUR = "t6W";
+    private final String TINKERFORGE_SENSOR_UID_KÜCHE_AMBIENTELIGHT = "yiz";
+
+    private final String TINKERFORGE_SENSOR_UID_WOHNZIMMER_MOTION = "wtF";
+    private final String TINKERFORGE_SENSOR_UID_WOHNZIMMER_PASSAGE = "tJ9";
+    private final String TINKERFORGE_SENSOR_UID_WOHNZIMMER_TEMPERATUR = "taL";
+    private final String TINKERFORGE_SENSOR_UID_WOHNZIMMER_AMBIENTELIGHT = "yhZ";
+    private final String TINKERFORGE_SENSOR_UID_WOHNZIMMER_CO2 = "x7e";
+
+    private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_MOTION = "wt9";
+    private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_PASSAGE = "tJo";
+    private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_TEMPERATUR = "tm1";
+    private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_AMBIENTELIGHT = "yh9";
+    private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_CO2 = "xtg";
+    private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_1 = "vdv";
+    private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_2 = "vcQ";
+    private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_3 = "vcn";
+    private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_4 = "vdT";
+    
+
+    
+    public String getRASPBERRY_BROKER_CONNECTION() {
+        return "tcp://" + RASPBERRY_PI_IP + ":" + RASPBERRY_PI_MQTT_BROKER_PORT;
     }
     
-    public char[] getPassword() {
-        char[] pw = password.toCharArray();
+    public String getRASPBERRY_PI_MQTT_BROKER_TOPIC(String modul){
+        return RASPBERRY_PI_MQTT_BROKER_TOPIC + "/"+ modul;
+    }
+    
+    public String getRASPBERRY_PI_MQTT_BROKER_CLIENT(String modul,String room,String uid){
+        return RASPBERRY_PI_MQTT_BROKER_TOPIC + "/"+ modul + "/" + room + "/" + uid + "/value";
+    }
+    
+    public String getRASPBERRY_PI_MQTT_BROKER_LASTWILL(String modul,String room,String uid){
+        return RASPBERRY_PI_MQTT_BROKER_TOPIC + "/"+ modul + "/" + room + "/" + uid + "/connection";
+    }
+
+    public String getRASPBERRY_PI_IP() {
+        return RASPBERRY_PI_IP;
+    }
+
+    public String getRASPBERRY_PI_BENUTZER() {
+        return RASPBERRY_PI_BENUTZER;
+    }
+
+    public char[] getRASPBERRY_PI_PW() {
+        char[] pw = RASPBERRY_PI_PW.toCharArray();
         return pw;
     }
-    
-    /*
-    Wifi & Internet getter
-    */
-    public String getPiIp() {
-        return piIP;
-    }
-
-    public String getBrokerTopic() {
-        return brokerTopic;
-    }
-
-    public int getBrokerPort() {
-        return brokerPort;
-    }
-
-    public String getBrokerConnection() {
-        return "tcp://" + piIP + ":" + brokerPort;
-    }
-
-////////////////////////////////////////////////////////////////////////////////
-    /*
-    SIOT Dashboard getter
-    */
-
-    // INPUT
-    public String getSIOTUSER_AGENT() {
-        return USER_AGENT;
-    }
-
-    public String getSIOTURL() {
-        return URL;
-    }
-
-    public String getSIOTLicence() {
-        return Licence;
-    }
-    
-    // OUTPUT
-     public String getMessageOnOff() {
-        // https://siot.net:12935/getdata?centerUID=A751-6354-E157-4A05-BDAB-77BB-35E5-2657&sensorUID=65206DBD5B5B465EACBE8BFD8DE92285
-        String onOff = URL+"/getdata?centerUID="+Licence+"&sensorUID="+service_message_onOff;
-        return onOff;
-    }
-    
-     /*
-    Twilio getter's
-    */
-
-    public String getTwilio_sid() {
-        return twilio_sid;
-    }
-
-    public String getTwilio_auth_token() {
-        return twilio_auth_token;
-    }
-
-    public static String getTwilio_voice_nummer() {
-        return twilio_voice_nummer;
-    }
-    
-    public static String getTwilio_sms_nummer() {
-        return twilio_sms_nummer;
-    }
-    
-    
-    /*
-    E-Mail getter's
-    */
 
-    public String getEmailSender() {
-        return EmailSender;
+    public int getRASPBERRY_PI_MQTT_BROKER_PORT() {
+        return RASPBERRY_PI_MQTT_BROKER_PORT;
     }
 
-    public String getEmailPW() {
-        return EmailPW;
+    public String getWIFI_PW() {
+        return WIFI_PW;
     }
 
-    public String getEmailSmptAuth() {
-        return EmailSmptAuth;
+    public String getEMAIL_BENUTZER() {
+        return EMAIL_BENUTZER;
     }
 
-    public String getEmailUser() {
-        return EmailUser;
+    public String getEMAIL_PW() {
+        return EMAIL_PW;
     }
-     
-    /*
-    SIOT Key getter's
-    */
-    public String getStatus_inputKey_bad() {
-        return status_inputKey_bad;
-    }
-
-    public String getStatus_inputKey_eingang1() {
-        return status_inputKey_eingang1;
-    }
-
-    public String getStatus_inputKey_eingang2() {
-        return status_inputKey_eingang2;
-    }
-
-    public String getStatus_inputKey_küche() {
-        return status_inputKey_küche;
-    }
-
-    public String getStatus_inputKey_schlafz() {
-        return status_inputKey_schlafz;
-    }
-
-    public String getStatus_inputKey_wohnz() {
-        return status_inputKey_wohnz;
-    }     
-
-    public String getAl_inputKey_bad() {
-        return al_inputKey_bad;
-    }
-
-    public String getAl_inputKey_eingang() {
-        return al_inputKey_eingang;
-    }
 
-    public String getAl_inputKey_küche() {
-        return al_inputKey_küche;
+    public String getEMAIL() {
+        return EMAIL;
     }
 
-    public String getAl_inputKey_schlafz() {
-        return al_inputKey_schlafz;
+    public String getEMAIL_SMPT_AUTH() {
+        return EMAIL_SMPT_AUTH;
     }
 
-    public String getAl_inputKey_wohnz() {
-        return al_inputKey_wohnz;
+    public String getSIOT_USER_AGENT() {
+        return SIOT_USER_AGENT;
     }
 
-    public String getM_inputKey_bad() {
-        return m_inputKey_bad;
+    public String getSIOT_URL() {
+        return SIOT_URL;
     }
 
-    public String getM_inputKey_eingang() {
-        return m_inputKey_eingang;
+    public String getSIOT_LICENCE() {
+        return SIOT_LICENCE;
     }
 
-    public String getM_inputKey_küche() {
-        return m_inputKey_küche;
+    public String getSIOT_SERVICE_INPUT_INOROUT_KEY() {
+        return SIOT_SERVICE_INPUT_INOROUT_KEY;
     }
 
-    public String getM_inputKey_schlafz() {
-        return m_inputKey_schlafz;
+    public String getSIOT_SERVICE_INPUT_LOCATION_KEY() {
+        return SIOT_SERVICE_INPUT_LOCATION_KEY;
     }
 
-    public String getM_inputKey_wohnz() {
-        return m_inputKey_wohnz;
+    public String getSIOT_SERVICE_INPUT_MESSAGE() {
+        return SIOT_SERVICE_INPUT_MESSAGE;
     }
 
-    public String getP_inputKey_bad() {
-        return p_inputKey_bad;
+    public String getSIOT_SERVICE_INPUT_ALARM() {
+        return SIOT_SERVICE_INPUT_ALARM;
     }
 
-    public String getP_inputKey_eingang() {
-        return p_inputKey_eingang;
+    public String getSMART_ME_WEBSERVICE() {
+        return SMART_ME_WEBSERVICE;
     }
 
-    public String getP_inputKey_küche() {
-        return p_inputKey_küche;
+    public String getSMART_ME_BENUTZER() {
+        return SMART_ME_BENUTZER;
     }
 
-    public String getP_inputKey_schlafz() {
-        return p_inputKey_schlafz;
+    public String getSMART_ME_PW() {
+        return SMART_ME_PW;
     }
 
-    public String getP_inputKey_wohnz() {
-        return p_inputKey_wohnz;
+    public String getSMART_ME_AUTH() {
+        return SMART_ME_AUTH;
     }
 
-    public String getService_alarm() {
-        return service_alarm;
+    public String getSMART_ME_PLUG_KEY_WOHNZIMMER() {
+        return SMART_ME_PLUG_KEY_WOHNZIMMER;
     }
 
-    public String getService_inOrOut() {
-        return service_inOrOut;
+    public String getSMART_ME_PLUG_KEY_SCHLAFZIMMER() {
+        return SMART_ME_PLUG_KEY_SCHLAFZIMMER;
     }
 
-    public String getService_location() {
-        return service_location;
+    public String getSMART_ME_PLUG_KEY_KÜCHE() {
+        return SMART_ME_PLUG_KEY_KÜCHE;
     }
 
-    public String getService_message() {
-        return service_message;
+    public String getSMART_ME_PLUG_KEY_BAD() {
+        return SMART_ME_PLUG_KEY_BAD;
     }
 
-    public String getT_inputKey_bad() {
-        return t_inputKey_bad;
+    public String getTWILIO_SID() {
+        return TWILIO_SID;
     }
 
-    public String getT_inputKey_eingang() {
-        return t_inputKey_eingang;
+    public String getTWILIO_AUTH() {
+        return TWILIO_AUTH;
     }
 
-    public String getT_inputKey_küche() {
-        return t_inputKey_küche;
+    public String getTWILIO_VOICE_NUMMER() {
+        return TWILIO_VOICE_NUMMER;
     }
 
-    public String getT_inputKey_schlafz() {
-        return t_inputKey_schlafz;
+    public String getTWILIO_SMS_NUMMER() {
+        return TWILIO_SMS_NUMMER;
     }
 
-    public String getT_inputKey_wohnz() {
-        return t_inputKey_wohnz;
+    public String getTINKERFORGE_MODUL_NAME_EINGANG() {
+        return TINKERFORGE_MODUL_NAME_EINGANG;
     }
 
-    public String getCo2_inputKey_schlafz() {
-        return co2_inputKey_schlafz;
+    public String getTINKERFORGE_MODUL_NAME_EINGANG2() {
+        return TINKERFORGE_MODUL_NAME_EINGANG2;
     }
 
-    public String getCo2_inputKey_wohnz() {
-        return co2_inputKey_wohnz;
+    public String getTINKERFORGE_MODUL_NAME_BAD() {
+        return TINKERFORGE_MODUL_NAME_BAD;
     }
-    
-    
-////////////////////////////////////////////////////////////////////////////////
-    /*
-    Smart-Me getters 
-     */
 
-    public String getSMPassword() {
-        return SMPassword;
+    public String getTINKERFORGE_MODUL_NAME_KÜCHE() {
+        return TINKERFORGE_MODUL_NAME_KÜCHE;
     }
 
-    public String getSMauthString() {
-        return SMauthString;
+    public String getTINKERFORGE_MODUL_NAME_SCHLAFZIMMER() {
+        return TINKERFORGE_MODUL_NAME_SCHLAFZIMMER;
     }
 
-    public String getSMwebPage() {
-        return SMwebPage;
+    public String getTINKERFORGE_MODUL_NAME_WOHNZIMMER() {
+        return TINKERFORGE_MODUL_NAME_WOHNZIMMER;
     }
 
-    public String getSMname() {
-        return SMname;
-    } 
-
-    public String getSmBadPlugUID() {
-        return smBadPlugUID;
+    public String getTINKERFORGE_MODUL_NAME_BETT() {
+        return TINKERFORGE_MODUL_NAME_BETT;
     }
 
-    public String getSmKüchePlugUID() {
-        return smKüchePlugUID;
+    public int getTINKERFORGE_PORT() {
+        return TINKERFORGE_PORT;
     }
 
-    public String getSmWohnzimmerPlugUID() {
-        return smWohnzimmerPlugUID;
+    public String getTINKERFORGE_IP_EINGANG() {
+        return TINKERFORGE_IP_EINGANG;
     }
-
-    public String getSmSchlafzimmerPlugUID() {
-        return smSchlafzimmerPlugUID;
-    }   
-    
- 
-////////////////////////////////////////////////////////////////////////////////
-    /*
-    BFH getter Tinkerforge Sensors
-     */
-// get Master UID's
 
-    public String getmUIDBad() {
-        return mUIDBad;
+    public String getTINKERFORGE_IP_EINGANG2() {
+        return TINKERFORGE_IP_EINGANG2;
     }
 
-    public String getmUIDBett() {
-        return mUIDBett;
+    public String getTINKERFORGE_IP_KÜCHE() {
+        return TINKERFORGE_IP_KÜCHE;
     }
 
-    public String getmUIDEingang2() {
-        return mUIDEingang2;
+    public String getTINKERFORGE_IP_BAD() {
+        return TINKERFORGE_IP_BAD;
     }
 
-    public String getmUIDEingang() {
-        return mUIDEingang;
+    public String getTINKERFORGE_IP_SCHLAFZIMMER() {
+        return TINKERFORGE_IP_SCHLAFZIMMER;
     }
 
-    public String getmUIDKüche() {
-        return mUIDKüche;
+    public String getTINKERFORGE_IP_WOHNZIMMER() {
+        return TINKERFORGE_IP_WOHNZIMMER;
     }
 
-    public String getmUIDSchalfzimmer() {
-        return mUIDSchalfzimmer;
+    public String getTINKERFORGE_IP_BETT() {
+        return TINKERFORGE_IP_BETT;
     }
 
-    public String getmUIDWohnzimmer() {
-        return mUIDWohnzimmer;
+    public String getTINKERFORGE_MODUL_UID_Eingang() {
+        return TINKERFORGE_MODUL_UID_Eingang;
     }
-   
-// get Modul name's
-    public String getModulBad() {    
-        return modulBad;
-    }
 
-    public String getModulSchlafzimmer() {
-        return modulSchlafzimmer;
+    public String getTINKERFORGE_MODUL_UID_EINGANG2() {
+        return TINKERFORGE_MODUL_UID_EINGANG2;
     }
 
-    public String getModulWohnzimmer() {
-        return modulWohnzimmer;
+    public String getTINKERFORGE_MODUL_UID_KÜCHE() {
+        return TINKERFORGE_MODUL_UID_KÜCHE;
     }
 
-    public String getModulEingang() {
-        return modulEingang;
+    public String getTINKERFORGE_MODUL_UID_BAD() {
+        return TINKERFORGE_MODUL_UID_BAD;
     }
 
-    public String getModulKüche() {
-        return modulKüche;
+    public String getTINKERFORGE_MODUL_UID_SCHLAFZIMMER() {
+        return TINKERFORGE_MODUL_UID_SCHLAFZIMMER;
     }
 
-    
-// get IP's
-    public String getTgBadIP() {
-        return tgBadIP;
+    public String getTINKERFORGE_MODUL_UID_BETT() {
+        return TINKERFORGE_MODUL_UID_BETT;
     }
 
-    public String getTgEingangIP() {
-        return tgEingangIP;
+    public String getTINKERFORGE_MODUL_UID_WOHNZIMMER() {
+        return TINKERFORGE_MODUL_UID_WOHNZIMMER;
     }
 
-    public String getTgBettIP() {
-        return tgBettIP;
+    public String getTINKERFORGE_SENSOR_UID_EINGANG_MOTION() {
+        return TINKERFORGE_SENSOR_UID_EINGANG_MOTION;
     }
 
-    public String getTgWohnzimmerIP() {
-        return tgWohnzimmerIP;
+    public String getTINKERFORGE_SENSOR_UID_EINGANG_PASSAGE() {
+        return TINKERFORGE_SENSOR_UID_EINGANG_PASSAGE;
     }
 
-    public String getTgSchlafzimmerIP() {
-        return tgSchlafzimmerIP;
+    public String getTINKERFORGE_SENSOR_UID_EINGANG_TEMPERATUR() {
+        return TINKERFORGE_SENSOR_UID_EINGANG_TEMPERATUR;
     }
 
-    public String getTgEingang2IP() {
-        return tgEingang2IP;
+    public String getTINKERFORGE_SENSOR_UID_EINGANG_AMBIENTELIGHT() {
+        return TINKERFORGE_SENSOR_UID_EINGANG_AMBIENTELIGHT;
     }
 
-    public String getTgKücheIP() {
-        return tgKücheIP;
+    public String getTINKERFORGE_SENSOR_UID_BAD_MOTION() {
+        return TINKERFORGE_SENSOR_UID_BAD_MOTION;
     }
-    
-    
-// get UID's
-    public String getBadAmbientLightUID() {
-        return badAmbientLightUID;
-    }
 
-    public String getBadMotionUID() {
-        return badMotionUID;
+    public String getTINKERFORGE_SENSOR_UID_BAD_PASSAGE() {
+        return TINKERFORGE_SENSOR_UID_BAD_PASSAGE;
     }
 
-    public String getBadPassageUID() {
-        return badPassageUID;
+    public String getTINKERFORGE_SENSOR_UID_BAD_TEMPERATUR() {
+        return TINKERFORGE_SENSOR_UID_BAD_TEMPERATUR;
     }
 
-    public String getBadTemperaturUID() {
-        return badTemperaturUID;
+    public String getTINKERFORGE_SENSOR_UID_BAD_AMBIENTELIGHT() {
+        return TINKERFORGE_SENSOR_UID_BAD_AMBIENTELIGHT;
     }
 
-    public String getEingangAmbientLightUID() {
-        return eingangAmbientLightUID;
+    public String getTINKERFORGE_SENSOR_UID_KÜCHE_MOTION() {
+        return TINKERFORGE_SENSOR_UID_KÜCHE_MOTION;
     }
 
-    public String getEingangMotionUID() {
-        return eingangMotionUID;
+    public String getTINKERFORGE_SENSOR_UID_KÜCHE_PASSAGE() {
+        return TINKERFORGE_SENSOR_UID_KÜCHE_PASSAGE;
     }
 
-    public String getEingangPassageUID() {
-        return eingangPassageUID;
+    public String getTINKERFORGE_SENSOR_UID_KÜCHE_TEMPERATUR() {
+        return TINKERFORGE_SENSOR_UID_KÜCHE_TEMPERATUR;
     }
 
-    public String getEingangTemperaturUID() {
-        return eingangTemperaturUID;
+    public String getTINKERFORGE_SENSOR_UID_KÜCHE_AMBIENTELIGHT() {
+        return TINKERFORGE_SENSOR_UID_KÜCHE_AMBIENTELIGHT;
     }
 
-    public String getKücheAmbientLightUID() {
-        return kücheAmbientLightUID;
+    public String getTINKERFORGE_SENSOR_UID_WOHNZIMMER_MOTION() {
+        return TINKERFORGE_SENSOR_UID_WOHNZIMMER_MOTION;
     }
 
-    public String getKücheMotionUID() {
-        return kücheMotionUID;
+    public String getTINKERFORGE_SENSOR_UID_WOHNZIMMER_PASSAGE() {
+        return TINKERFORGE_SENSOR_UID_WOHNZIMMER_PASSAGE;
     }
 
-    public String getKüchePassageUID() {
-        return küchePassageUID;
+    public String getTINKERFORGE_SENSOR_UID_WOHNZIMMER_TEMPERATUR() {
+        return TINKERFORGE_SENSOR_UID_WOHNZIMMER_TEMPERATUR;
     }
 
-    public String getKücheTemperaturUID() {
-        return kücheTemperaturUID;
+    public String getTINKERFORGE_SENSOR_UID_WOHNZIMMER_AMBIENTELIGHT() {
+        return TINKERFORGE_SENSOR_UID_WOHNZIMMER_AMBIENTELIGHT;
     }
 
-    public String getSchlafzAmbientLightUID() {
-        return schlafzAmbientLightUID;
+    public String getTINKERFORGE_SENSOR_UID_WOHNZIMMER_CO2() {
+        return TINKERFORGE_SENSOR_UID_WOHNZIMMER_CO2;
     }
 
-    public String getSchlafzCO2UID() {
-        return schlafzCO2UID;
+    public String getTINKERFORGE_SENSOR_UID_SCHLAFZIMMER_MOTION() {
+        return TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_MOTION;
     }
 
-    public String getSchlafzMotionUID() {
-        return schlafzMotionUID;
+    public String getTINKERFORGE_SENSOR_UID_SCHLAFZIMMER_PASSAGE() {
+        return TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_PASSAGE;
     }
 
-    public String getSchlafzPassageUID() {
-        return schlafzPassageUID;
+    public String getTINKERFORGE_SENSOR_UID_SCHLAFZIMMER_TEMPERATUR() {
+        return TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_TEMPERATUR;
     }
 
-    public String getSchlafzTemperaturUID() {
-        return schlafzTemperaturUID;
+    public String getTINKERFORGE_SENSOR_UID_SCHLAFZIMMER_AMBIENTELIGHT() {
+        return TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_AMBIENTELIGHT;
     }
 
-    public String getWohnzAmbientLightUID() {
-        return wohnzAmbientLightUID;
+    public String getTINKERFORGE_SENSOR_UID_SCHLAFZIMMER_CO2() {
+        return TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_CO2;
     }
 
-    public String getWohnzCO2UID() {
-        return wohnzCO2UID;
+    public String getTINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_1() {
+        return TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_1;
     }
 
-    public String getWohnzMotionUID() {
-        return wohnzMotionUID;
+    public String getTINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_2() {
+        return TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_2;
     }
 
-    public String getWohnzPassageUID() {
-        return wohnzPassageUID;
+    public String getTINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_3() {
+        return TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_3;
     }
 
-    public String getWohnzTemperaturUID() {
-        return wohnzTemperaturUID;
-    }
-   
-    
-    /*
-    Sensor Topics
-    */
-    public int getTgPort() {
-        return tgPort;
-    }
-    
-    public String getClientIDTopic(String modul){
-        return brokerTopic + "/"+ modul;
-    }
-    
-    public String getClientIDValueTopic(String modul,String room,String uid){
-        return brokerTopic + "/"+ modul + "/" + room + "/" + uid + "/value";
-    }
-    
-    public String getLastWillConnectionTopic(String modul,String room,String uid){
-        return brokerTopic + "/"+ modul + "/" + room + "/" + uid + "/connection";
+    public String getTINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_4() {
+        return TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_4;
     }
     
 }

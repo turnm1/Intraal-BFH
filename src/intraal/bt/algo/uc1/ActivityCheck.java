@@ -5,21 +5,13 @@
  */
 package intraal.bt.algo.uc1;
 
-import com.tinkerforge.BrickletAmbientLightV2;
-import com.tinkerforge.IPConnection;
-import static intraal.bt.algo.uc1.WarningTimer.activityStatus;
 import intraal.bt.config.connection.ConnectionParameters;
-import intraal.bt.config.connection.siot.SiotDashboardInput;
-import intraal.bt.config.mqtt.MQTTCommunication;
-import intraal.bt.config.mqtt.MQTTParameters;
-import intraal.bt.system.settings.Settings;
-import java.net.URI;
+import intraal.bt.config.connection.Connections;
+import intraal.bt.system.settings.IntraalEinstellungen;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -30,74 +22,30 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class ActivityCheck implements MqttCallback {
 
-    BrickletAmbientLightV2 tinkerforg;
-    ConnectionParameters con;
-    IPConnection ipcon;
-    MqttMessage message;
-    Settings s;
-    MQTTParameters p;
+    ConnectionParameters cp;
+    Connections con;
+    IntraalEinstellungen s;
     WarningTimer w;
-    MQTTCommunication c;
-    SiotDashboardInput sdi;
-    
+
     private static boolean isNigh;
     private int flag = 0;
-    private static int isMotionEnded1;
-    private static int isMotionEnded2;
-    private static int isMotionEnded3;
-    private static int isMotionEnded4;
-    private static int isMotionEnded5;
-    private static int isPassage1;
-    private static int isPassage2;
-    private static int isPassage3;
-    private static int isPassage4;
-    private static int isPassage5;
+    private static int isMotionEnded1, isMotionEnded2, isMotionEnded3, isMotionEnded4, isMotionEnded5;
+    private static int isPassage1, isPassage2, isPassage3, isPassage4, isPassage5;
 
-    /////////////////// EDIT HERE ///////////////////////
+    
     private final String UID = "OnePersonActivity";
     private final String USECASENR = "Two";
     private final String USECASE = "Usecase";
-    /////////////////////////////////////////////////////
 
-    /*
-    Connection with WLAN & MQTT Raspberry Pi Broker
-     */
-    private void connectMQTT() throws Exception {
-        con = new ConnectionParameters();
-        sdi = new SiotDashboardInput();
-        c = new MQTTCommunication();
-        s = new Settings();
-        p = new MQTTParameters();
-        p.setClientID(con.getClientIDTopic(UID));
-        p.setUserName(con.getUserName());
-        p.setPassword(con.getPassword());
-        p.setIsCleanSession(false);
-        p.setIsLastWillRetained(true);
-        p.setLastWillMessage("offline".getBytes());
-        p.setLastWillQoS(0);
-        p.setServerURIs(URI.create(con.getBrokerConnection()));
-        p.setWillTopic(con.getLastWillConnectionTopic(USECASE, USECASENR, UID));
-        p.setMqttCallback(this);
-        c.connect(p);
-        c.publishActualWill("online".getBytes());
-        p.getLastWillMessage();
-    }
 
     public void activityCheck() throws Exception {
-        connectMQTT();
-        c.subscribe("Gateway/10.0.233.51/#", 0);
+        con = new Connections();
+        con.getMQTTconnection(USECASE, USECASENR, UID);
+        con.subscribeMQTT("#/");
     }
 
-    private void pushLocation(String location) throws Exception{
-        message = new MqttMessage();
-        message.setRetained(true);
-        message.setQos(0);
-        message.setPayload((location).getBytes());
-            sdi.setInputKey(con.getService_location());
-            sdi.setInputMessage(location); 
-            sdi.sendInput();
-        c.publish(con.getClientIDValueTopic(USECASE, USECASENR, UID), message);
-        System.out.println("Activity Algo Message: "+message);
+    private void activity(String location) throws Exception{
+            con.sendMQTTmessage(USECASE, USECASENR, UID, location);
     }
     
     private Date parseDate(String date) {
@@ -175,67 +123,17 @@ public class ActivityCheck implements MqttCallback {
                     w.stopWarningTimer();  
                     flag = 0;
             }
-            
-            
-//                if (sendedRoom.equals("Schlafzimmer")){
-//                   if ((activityType).equals("Motion") && messageVal.equals("Motion Detected")){
-//                        w.stopWarningTimer();
-//                   } else if ((activityType).equals("Motion") && messageVal.equals("Motion Ended")){
-//                       w = new WarningTimer(15); 
-//                   } else if ((activityType).equals("Passage") && messageVal.equals("Passage Detected")){
-//                       
-//                   } else if ((activityType).equals("Helper") && messageVal.equals("On the bed") || messageVal.equals("Not on the bed")){
-//                       
-//                   } 
-//                }
-//                else if (sendedRoom.equals("Kuche")){
-//                   if ((activityType).equals("Motion") && messageVal.equals("Motion Detected")){
-//                       
-//                   } else if ((activityType).equals("Motion") && messageVal.equals("Motion Ended")){
-//                        
-//                   } else if ((activityType).equals("Passage") && messageVal.equals("Passage Detected")){
-//                       
-//                   }
-//                }
-//                 else if (sendedRoom.equals("Wohnzimmer")){
-//                   if ((activityType).equals("Motion") && messageVal.equals("Motion Detected")){
-//                        w.stopWarningTimer();
-//                   } else if ((activityType).equals("Motion") && messageVal.equals("Motion Ended")){
-//                       w = new WarningTimer(15);
-//                   } else if ((activityType).equals("Passage") && messageVal.equals("Passage Detected")){
-//                       
-//                   }
-//                }
-//                 else if (sendedRoom.equals("Eingang")){
-//                   if ((activityType).equals("Motion") && messageVal.equals("Motion Detected")){
-//                        
-//                   } else if ((activityType).equals("Motion") && messageVal.equals("Motion Ended")){
-//                        
-//                   } else if ((activityType).equals("Passage") && messageVal.equals("Passage Detected")){
-//                       
-//                   }
-//                }
-//                else if (sendedRoom.equals("Bad")){
-//                   if ((activityType).equals("Motion") && messageVal.equals("Motion Detected")){
-//                       
-//                   } else if ((activityType).equals("Motion") && messageVal.equals("Motion Ended")){
-//                        
-//                   } else if ((activityType).equals("Passage") && messageVal.equals("Passage Detected")){
-//                       
-//                   }
-//                }       
             }
         }
     }
 
     @Override
     public void connectionLost(Throwable cause) {
-        System.out.println(" =========== Connection Lost =========== ");
+        System.out.println(" ===== MQTT VERBINDUNG UNTERBROCKEN! ===== ");
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
-        System.out.println(" =========== Delivery Completed =========== ");
+        System.out.println(" ===== MQTT MESSAGE GESENDET! ===== ");
     }
-
 }

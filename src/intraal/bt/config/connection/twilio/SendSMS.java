@@ -16,17 +16,12 @@ import intraal.bt.config.connection.ConnectionParameters;
 public class SendSMS {
 
   ConnectionParameters cp = new ConnectionParameters();
- 
-  
-  public void sendSMS(String sendTo, String text, String sendFrom){
-    Twilio.init(cp.getTwilio_sid(), cp.getTwilio_auth_token());
-    
-    Message message = Message
-        .creator(new PhoneNumber(sendTo), // to
-                 new PhoneNumber(sendFrom), // from
-                 text)
-        .create();
 
-    System.out.println(message.getSid());
+  public void sendSMS(String sendTo, String text, String sendFrom){
+    Twilio.init(cp.getTWILIO_SID(), cp.getTWILIO_AUTH());
+    
+    Message.creator(new PhoneNumber(sendTo), new PhoneNumber(sendFrom), text).create();
+
+    System.out.println("SMS wurde gesendet");
   }
 }

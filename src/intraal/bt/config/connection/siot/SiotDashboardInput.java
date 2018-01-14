@@ -35,16 +35,16 @@ public class SiotDashboardInput {
     // HTTP POST request
     public void sendInput() throws Exception {
 
-        String url = siotCon.getSIOTURL() + "/mqtt/request";
+        String url = siotCon.getSIOT_URL()+ "/mqtt/request";
         URL obj = new URL(url);
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
         //add reuqest header
         con.setRequestMethod("POST");
-        con.setRequestProperty("User-Agent", siotCon.getSIOTUSER_AGENT()); //USER_AGENT
+        con.setRequestProperty("User-Agent", siotCon.getSIOT_USER_AGENT()); //USER_AGENT
         con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-        String urlParameters = "message= " + data + "&topic=siot/DAT/" + siotCon.getSIOTLicence() + "/" + inputKey;
+        String urlParameters = "message= " + data + "&topic=siot/DAT/" + siotCon.getSIOT_LICENCE()+ "/" + inputKey;
 
         // Send post request
         con.setDoOutput(true);

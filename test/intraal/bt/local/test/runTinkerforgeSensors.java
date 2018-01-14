@@ -5,7 +5,7 @@
  */
 package intraal.bt.local.test;
 
-import intraal.bt.algo.uc1.TinkerForgeSensorTest;
+import intraal.bt.config.connection.ConnectionTest_orginal;
 
 /**
  *
@@ -14,8 +14,8 @@ import intraal.bt.algo.uc1.TinkerForgeSensorTest;
 public class runTinkerforgeSensors {
     
     public static void main(String[] args) throws Exception {
-        TinkerForgeSensorTest test = new TinkerForgeSensorTest();
-        test.runSensorTest();
+        ConnectionTest_orginal test = new ConnectionTest_orginal();
+        test.connectionTestWithFeedback();
     }
     
 }

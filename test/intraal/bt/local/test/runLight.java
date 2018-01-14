@@ -5,11 +5,7 @@
  */
 package intraal.bt.local.test;
 
-import intraal.bt.sensor.room.bad.badAmbientLight;
-import intraal.bt.sensor.room.eingang.eingangAmbientLight;
-import intraal.bt.sensor.room.kueche.kuecheAmbientLight;
-import intraal.bt.sensor.room.schlafzimmer.schlafzimmerAmbientLight;
-import intraal.bt.sensor.room.wohnzimmer.wohnzimmerAmbientLight;
+import intraal.bt.sensor.room.AmbientLightSensor;
 
 /**
  *
@@ -17,18 +13,15 @@ import intraal.bt.sensor.room.wohnzimmer.wohnzimmerAmbientLight;
  */
 public class runLight {
 
-    eingangAmbientLight a1 = new eingangAmbientLight();
-    badAmbientLight a2 = new badAmbientLight();
-    schlafzimmerAmbientLight a3 = new schlafzimmerAmbientLight();
-    wohnzimmerAmbientLight a4 = new wohnzimmerAmbientLight();
-    kuecheAmbientLight a5 = new kuecheAmbientLight();
-
+    AmbientLightSensor al = new AmbientLightSensor("yiJ", "Bad", "AmbientLight");
+//     AmbientLightSensor al = new AmbientLightSensor("yiJ", "Bad", "AmbientLight");
+//      AmbientLightSensor al = new AmbientLightSensor("yiJ", "Bad", "AmbientLight");
+//       AmbientLightSensor al = new AmbientLightSensor("yiJ", "Bad", "AmbientLight");
+//        AmbientLightSensor al = new AmbientLightSensor("yiJ", "Bad", "AmbientLight");
+    
+    
     public void detectLight() throws Exception {
-        a1.getLight();
-        a2.getLight();
-        a3.getLight();
-        a4.getLight();
-        a5.getLight();
+        al.getLight();
     }
 
     public static void main(String[] args) throws Exception {
