@@ -19,33 +19,36 @@ import java.util.Properties;
  * @author turna
  */
 public class KontaktInformationen {
-
-    public static List<KontaktInformationen> loadKontaktInformationen() throws FileNotFoundException, IOException {
-        File propertiesFile = new File(""); // Pfad hier hinterlegen
+    
+        public static List<KontaktInformationen> loadKontaktInformationen() throws FileNotFoundException, IOException {
+        File propertiesFile = new File("C:\\Users\\turna\\Documents\\NetBeansProjects\\Intraal-BT\\src\\intraal\\bt\\system\\settings\\kontaktinformationen.properties"); // Pfad hier hinterlegen
         FileReader propertiesReader = new FileReader(propertiesFile);
         Properties props = new Properties();
         props.load(propertiesReader);
+        
         KontaktInformationen kontaktperson = new KontaktInformationen();
         kontaktperson.setName(props.getProperty("k_Nachname"));
         kontaktperson.setPrename(props.getProperty("k_Vorname"));
-        kontaktperson.setStreet("k_Strasse");
-        kontaktperson.setStreetNumber("k_Strassennummer");
-        kontaktperson.setPlz("k_PLZ");
-        kontaktperson.setCity("k_Stadt");
-        kontaktperson.setEmail("k_Email");
-        kontaktperson.setTelefon("k_Telefonnummer");;
+        kontaktperson.setStreet(props.getProperty("k_Strasse"));
+        kontaktperson.setStreetNumber(props.getProperty("k_Strassennummer"));
+        kontaktperson.setPlz(props.getProperty("k_PLZ"));
+        kontaktperson.setCity(props.getProperty("k_Stadt"));
+        kontaktperson.setEmail(props.getProperty("k_Email"));
+        kontaktperson.setTelefon(props.getProperty("k_Telefonnummer"));;
+        
         KontaktInformationen bewohner = new KontaktInformationen();
         bewohner.setName(props.getProperty("b_Nachname"));
         bewohner.setPrename(props.getProperty("b_Vorname"));
-        bewohner.setStreet("b_Strasse");
-        bewohner.setStreetNumber("b_Strassennummer");
-        bewohner.setPlz("b_PLZ");
-        bewohner.setCity("b_Stadt");
-        bewohner.setEmail("b_Email");
-        bewohner.setTelefon("b_Telefonnummer");;
+        bewohner.setStreet(props.getProperty("b_Strasse"));
+        bewohner.setStreetNumber(props.getProperty("b_Strassennummer"));
+        bewohner.setPlz(props.getProperty("b_PLZ"));
+        bewohner.setCity(props.getProperty("b_Stadt"));
+        bewohner.setEmail(props.getProperty("b_Email"));
+        bewohner.setTelefon(props.getProperty("b_Telefonnummer"));
         List<KontaktInformationen> kontaktInformationen = new ArrayList<>(Arrays.asList(kontaktperson, bewohner));
         return kontaktInformationen;
     }
+
     
     private String name;
     private String prename;
@@ -73,6 +76,7 @@ public class KontaktInformationen {
         this.prename = prename;
     }
 
+    
     public String getStreetAndNr() {
         return street + " " + streetNumber;
     }
@@ -108,7 +112,7 @@ public class KontaktInformationen {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+        
     public String getTelefon() {
         return telefon;
     }
@@ -116,7 +120,5 @@ public class KontaktInformationen {
     public void setTelefon(String telefon) {
         this.telefon = telefon;
     }
-
-
 
 }

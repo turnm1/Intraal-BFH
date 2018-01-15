@@ -15,7 +15,7 @@ public class ConnectionParameters {
     /*
     RASPBERRY PI, MQTT BROKER & WIFI
      */
-    private final String RASPBERRY_PI_IP = "10.0.233.51";  // BFH Orginal IP: 10.0.233.172 / Passwort: nespresso //// HDI: 10.0.0.5 / PW: w0rkSmart! ******************************************************************************
+    private final String RASPBERRY_PI_IP = "10.0.233.51"; 
     private final String RASPBERRY_PI_BENUTZER = "intraalpi";
     private final String RASPBERRY_PI_PW = "intraal";
     private final String RASPBERRY_PI_MQTT_BROKER_TOPIC = "Gateway/" + RASPBERRY_PI_IP;
@@ -99,7 +99,8 @@ public class ConnectionParameters {
     private final String TINKERFORGE_SENSOR_UID_EINGANG_AMBIENTELIGHT = "yg4";
 
     private final String TINKERFORGE_SENSOR_UID_BAD_MOTION = "qtu";
-    private final String TINKERFORGE_SENSOR_UID_BAD_PASSAGE = "qsE";
+    private final String TINKERFORGE_SENSOR_UID_BAD_PASSAGE = "tHC";
+    private final String TINKERFORGE_SENSOR_UID_BAD_FEUCHTIGKEIT = "dgu";
     private final String TINKERFORGE_SENSOR_UID_BAD_TEMPERATUR = "qvy";
     private final String TINKERFORGE_SENSOR_UID_BAD_AMBIENTELIGHT = "yiJ";
 
@@ -108,16 +109,16 @@ public class ConnectionParameters {
     private final String TINKERFORGE_SENSOR_UID_KÜCHE_TEMPERATUR = "t6W";
     private final String TINKERFORGE_SENSOR_UID_KÜCHE_AMBIENTELIGHT = "yiz";
 
-    private final String TINKERFORGE_SENSOR_UID_WOHNZIMMER_MOTION = "wtF";
+    private final String TINKERFORGE_SENSOR_UID_WOHNZIMMER_MOTION = "kgt";
     private final String TINKERFORGE_SENSOR_UID_WOHNZIMMER_PASSAGE = "tJ9";
     private final String TINKERFORGE_SENSOR_UID_WOHNZIMMER_TEMPERATUR = "taL";
-    private final String TINKERFORGE_SENSOR_UID_WOHNZIMMER_AMBIENTELIGHT = "yhZ";
+    private final String TINKERFORGE_SENSOR_UID_WOHNZIMMER_AMBIENTELIGHT = "uQu";
     private final String TINKERFORGE_SENSOR_UID_WOHNZIMMER_CO2 = "x7e";
 
     private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_MOTION = "wt9";
-    private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_PASSAGE = "tJo";
+    private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_PASSAGE = "qsE";
     private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_TEMPERATUR = "tm1";
-    private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_AMBIENTELIGHT = "yh9";
+    private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_AMBIENTELIGHT = "yhZ";
     private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_CO2 = "xtg";
     private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_1 = "vdv";
     private final String TINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_2 = "vcQ";

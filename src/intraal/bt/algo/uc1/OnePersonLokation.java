@@ -30,7 +30,7 @@ public class OnePersonLokation implements MqttCallback {
     public void locationOfPerson() throws Exception {
         con = new Connections();
         con.getMQTTconnection(USECASE, USECASENR, UID);
-        con.subscribeMQTT("#/");
+        con.subscribeMQTT();
     }
 
     private void pushLocation(String location) throws Exception{

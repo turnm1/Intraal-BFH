@@ -15,7 +15,7 @@ import intraal.bt.system.settings.IntraalEinstellungen;
  *
  * @author turna
  */
-public class LoadCellSensor {
+public class LoadCellSensor_1 {
 
     BrickletLoadCell tinkerforge;
     ConnectionParameters cp;
@@ -25,28 +25,15 @@ public class LoadCellSensor {
     private final String MODUL;
     private final String TINKERFORGE_IP;
     private static int flag;
-    private static int OnOffBed;
+    private static int OnOffBed = 22500;
 
-    public LoadCellSensor(String tinkerforgeIP, String uid, String room, String modul) {
+    public LoadCellSensor_1(String tinkerforgeIP, String uid, String room, String modul) {
         this.TINKERFORGE_IP = tinkerforgeIP;
         this.UID = uid;
         this.ROOM = room;
         this.MODUL = modul;
     }
     
-    private int getOnOffWight(String uid){
-        if (uid.equals(cp.getTINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_1())){
-            OnOffBed = 22500;
-        } else if (uid.equals(cp.getTINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_2())){
-            OnOffBed = 22500;
-        } else if (uid.equals(cp.getTINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_3())){
-            OnOffBed = 22500;
-        } else if (uid.equals(cp.getTINKERFORGE_SENSOR_UID_SCHLAFZIMMER_LOADCELL_4())){
-            OnOffBed = 22500;
-        }
-        return OnOffBed;
-    }
-
     private void getTinkerforgeConnection() throws Exception {
         IPConnection ipcon = new IPConnection();
         cp = new ConnectionParameters();
@@ -66,14 +53,14 @@ public class LoadCellSensor {
                 @Override
                 public void weight(int weight) {
 
-                    if (weight >= getOnOffWight(UID) && flag != 0) {
-                        System.out.println(weight+ " = " + getOnOffWight(UID));
+                    if (weight >= OnOffBed && flag != 0) {
+                        System.out.println(weight+ " = " + OnOffBed);
                         String nachricht = "On the bed";
                         con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
                         flag = 0;
                     }
                     
-                    if (weight < getOnOffWight(UID) && flag != 1) {
+                    if (weight < OnOffBed && flag != 1) {
                         String nachricht = "Not on the bed";
                         con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
                         flag = 1;

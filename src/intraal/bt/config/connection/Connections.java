@@ -42,8 +42,8 @@ public class Connections implements MqttCallback{
         p.getLastWillMessage();
     }
     
-    public void subscribeMQTT(String topic){
-        c.subscribe("Gateway/10.0.233.51/"+topic, 0);
+    public void subscribeMQTT(){
+        c.subscribe("Gateway/10.0.233.51/#", 0);
     }
     
     public void sendMQTTmessage(String modul, String room, String uid, String messageText){
@@ -68,20 +68,21 @@ public class Connections implements MqttCallback{
         IPConnection ipcon = new IPConnection();
         ConnectionParameters cp = new ConnectionParameters();
         ipcon.connect(tinkerforgeIP, cp.getTINKERFORGE_PORT());
+        System.out.println("VERBINDUNG WURDE MIT TINKERFORGE HERGESTELLT: " + tinkerforgeIP);
     }
 
         @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        System.out.println(" ===== MQTT MESSAGE ERHALTEN! ===== ");
+        System.out.print(""); // System.out.println(" ===== MQTT MESSAGE ERHALTEN! ===== ");
     }
 
     @Override
     public void connectionLost(Throwable cause) {
-        System.out.println(" ===== MQTT VERBINDUNG UNTERBROCKEN! ===== ");
+        System.out.print(""); // System.out.println(" ===== MQTT VERBINDUNG UNTERBROCKEN! ===== ");
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
-        System.out.println(" ===== MQTT MESSAGE GESENDET! ===== ");
+      System.out.print(""); //  System.out.println(" ===== MQTT MESSAGE GESENDET! ===== ");
     }
 }
