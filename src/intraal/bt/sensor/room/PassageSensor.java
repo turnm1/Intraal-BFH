@@ -74,7 +74,7 @@ public class PassageSensor {
             tinkerforge.setDistanceCallbackPeriod(200);
             
         } catch (Exception ex) {
-            System.out.println("WIFI-Verbindung unterbrochen: "+ MODUL + "/" + ROOM + " IP: " + TINKERFORGE_IP);
+            System.out.println("x DISC: WIFI-Verbindung unterbrochen: "+ MODUL + "/" + ROOM + " IP: " + TINKERFORGE_IP);
         }
     }
 }

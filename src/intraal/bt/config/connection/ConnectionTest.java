@@ -78,7 +78,7 @@ public class ConnectionTest {
         kontaktinformationen = KontaktInformationen.loadKontaktInformationen();
         KontaktInformationen ki = kontaktinformationen.get(0);
         System.out.println(isConnected);
-        if (number >= 7 && isConnected == true) {
+        if (number == 7 && isConnected == true) {
             sendtext.sendSystemOnline(ki.getEmail(), ki.getTelefon(), cp.getTWILIO_SMS_NUMMER());
         } else if (isConnected == false) {
             // Stop Running!!!!
@@ -113,6 +113,7 @@ public class ConnectionTest {
     public void stopRunning() {
         isRunning = false;
         timer.cancel();
+        timer.purge();
     }
 
     class testModul extends TimerTask {

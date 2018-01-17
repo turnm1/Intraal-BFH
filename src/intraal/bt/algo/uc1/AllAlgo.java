@@ -13,6 +13,7 @@ import intraal.bt.config.mqtt.MQTTCommunication;
 import intraal.bt.config.mqtt.MQTTParameters;
 import intraal.bt.system.settings.IntraalEinstellungen;
 import intraal.bt.system.settings.KontaktInformationen;
+import java.io.IOException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -54,6 +55,7 @@ public class AllAlgo implements MqttCallback {
     private static int isMotionEnded1, isMotionEnded2, isMotionEnded3, isMotionEnded4, isMotionEnded5;
     private static int isPassage1, isPassage2, isPassage3, isPassage4, isPassage5;
 
+    // MQTT Connection
     private void connectMQTT() throws Exception {
         con = new ConnectionParameters();
         c = new MQTTCommunication();
@@ -73,6 +75,7 @@ public class AllAlgo implements MqttCallback {
         p.getLastWillMessage();
     }
 
+    // execution methode
     public void runIntraalAlgo() {
         try {
             connectMQTT();
@@ -91,7 +94,7 @@ public class AllAlgo implements MqttCallback {
         System.out.println(con.getRASPBERRY_PI_MQTT_BROKER_CLIENT(usecase, room, modul) + ": " + message);
     }
 
-    // Message
+    // Message to SIOT
     public void sendSIOTmessage(String siotKey, String messageText) throws Exception {
         SiotDashboardInput sdi = new SiotDashboardInput();
         sdi.setInputKey(siotKey);
@@ -99,6 +102,7 @@ public class AllAlgo implements MqttCallback {
         sdi.sendInput();
     }
 
+    // push Light Algo
     private void pushLight(String plugUID, String Switch) throws Exception {
         String location = plugUID;
         if (plugUID.equals(con.getSMART_ME_PLUG_KEY_WOHNZIMMER())) {
@@ -117,6 +121,7 @@ public class AllAlgo implements MqttCallback {
         pushMQTTmessage("Helper", "Light", location, nachricht);
     }
 
+    // push Location Algo
     private void pushLocation(String location) throws Exception {
         pushMQTTmessage("Helper", "Location1", location, location);
         sendSIOTmessage(con.getSIOT_SERVICE_INPUT_LOCATION_KEY(), location);
@@ -128,6 +133,7 @@ public class AllAlgo implements MqttCallback {
         }
     }
 
+    // push Bed activity Algo
     private void pushBedActivity() throws Exception {
       //  System.out.println(LoadCell1 + LoadCell2 + LoadCell3 + LoadCell4);
         if (LoadCell1 + LoadCell2 + LoadCell3 + LoadCell4 == 4) {
@@ -141,6 +147,7 @@ public class AllAlgo implements MqttCallback {
         }
     }
 
+    // push House Activity Algo
     private void pushHouseActivity(int warningTime) throws Exception {
       //  System.out.println(isMotionEnded1 + isMotionEnded2 + isMotionEnded3 + isMotionEnded4 + isMotionEnded5);
 
@@ -153,10 +160,10 @@ public class AllAlgo implements MqttCallback {
         }
     }
 
-    // helper classes
+    // Helper methods for Algo
     private Date parseDate(String date) {
         final String inputFormat = "HH:mm";
-        SimpleDateFormat inputParser = new SimpleDateFormat(inputFormat, Locale.US);
+        SimpleDateFormat inputParser = new SimpleDateFormat(inputFormat, Locale.GERMAN);
         try {
             return inputParser.parse(date);
         } catch (java.text.ParseException e) {
@@ -164,16 +171,17 @@ public class AllAlgo implements MqttCallback {
         }
     }
 
-    private boolean isNight() {
-        IntraalEinstellungen ie = new IntraalEinstellungen();
+    private boolean isNight() throws IOException {
+        s = new IntraalEinstellungen();
+        IntraalEinstellungen setting = s.Settings();
         Calendar now = Calendar.getInstance();
         isNigh = false;
 
         int hour = now.get(Calendar.HOUR_OF_DAY); // Get hour in 24 hour format
         int minute = now.get(Calendar.MINUTE);
         Date date = parseDate(hour + ":" + minute);
-        Date startTime = parseDate(ie.getStartNightPhase());
-        Date endTime = parseDate(ie.getEndNightPhase());
+        Date startTime = parseDate(setting.getStartNightPhase());
+        Date endTime = parseDate(setting.getEndNightPhase());
         if (date.after(startTime) || date.before(endTime)) {
             isNigh = true;
         }
@@ -181,7 +189,7 @@ public class AllAlgo implements MqttCallback {
     }
     
 
-    // Algos
+    // Night Light Algo
     private void nightLightAlgo(String algoTyp, String algoCase, String messageVal) throws Exception {
         con = new ConnectionParameters();
         SmartMeService sme = new SmartMeService();
@@ -300,6 +308,7 @@ public class AllAlgo implements MqttCallback {
         }
     }
 
+    // Person location Algo ( one person! )
     private void personLocation(String algoTyp, String algoCase, String messageVal) throws Exception {
         if (algoCase.equals("Schlafzimmer")) {
             if ((messageVal).equals("Passage Detected") && !passageDetected.equals(algoCase) || passageDetected.equals("0")) {
@@ -372,6 +381,7 @@ public class AllAlgo implements MqttCallback {
         }
     }
 
+    // Bed Activity Algo
     private void bedActivity(String algoTyp, String algoCase, String messageVal) throws Exception {
         if (algoCase.equals("Schlafzimmer")) {
             if (messageVal.equals("On the bed")) {
@@ -407,8 +417,10 @@ public class AllAlgo implements MqttCallback {
         }
     }
 
+    // Person Activity Algo
     private void personActivity(String algoTyp, String algoCase, String messageVal) throws Exception {
         s = new IntraalEinstellungen();
+        IntraalEinstellungen settings = s.Settings();
         if (isNight() == true) {
             if (onBed == false) {
                 if (algoTyp.equals("Motion")){
@@ -426,7 +438,7 @@ public class AllAlgo implements MqttCallback {
                             isMotionEnded5 = 1;
                         }
                         
-                        pushHouseActivity(s.getWarningTime());
+                        pushHouseActivity(settings.getWarningTime());
                             
                     } else if (messageVal.equals("Motion Detected")) { 
                             if (algoCase.equals("Schlafzimmer")) {
@@ -465,7 +477,7 @@ public class AllAlgo implements MqttCallback {
 //                }
     }
     
-    // excution
+    // Get Subscribe Data
     @Override
     public void messageArrived(String topic, MqttMessage message) {
         if (topic.endsWith("value")) {
@@ -488,12 +500,12 @@ public class AllAlgo implements MqttCallback {
 
     @Override
     public void connectionLost(Throwable cause) {
-        System.out.print("x DISC: "); // System.out.println(" ===== MQTT VERBINDUNG UNTERBROCKEN! ===== ");
+      //  System.out.print("x DISC: "); // System.out.println(" ===== MQTT VERBINDUNG UNTERBROCKEN! ===== ");
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
-        System.out.print("+ PUSH: "); //  System.out.println(" ===== MQTT MESSAGE GESENDET! ===== ");
+      //  System.out.print("+ PUSH: "); //  System.out.println(" ===== MQTT MESSAGE GESENDET! ===== ");
     }
  
 }

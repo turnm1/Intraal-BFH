@@ -26,7 +26,7 @@ public class CallAndSendNotification {
 
     public void sendWarning(String email, String sendTo, String sendFrom, String message) throws IOException {
         System.out.println("@ SEND: Gefahrensituation Meldung");
-       // callWarningNotification(sendTo, sendFrom);
+        callWarningNotification(sendTo, sendFrom);
         sendTextWarningNotification(email, sendTo, sendFrom, message);
     }
 
@@ -73,7 +73,7 @@ public class CallAndSendNotification {
                 + "Sie werden sofort informiert, wenn sich die betroffene Person bewegt oder jemand vor Ihnen zu besuch gekommen ist.";
 
         sm.sendMail(subject, text, email);
-        //ssms.sendSMS(sendTo, text, sendFrom);
+        ssms.sendSMS(sendTo, text, sendFrom);
     }
 
     private void sendTextSystemOfflineNotification(String email, String sendTo, String sendFrom, String offlineModulMessage) throws IOException {
@@ -93,7 +93,7 @@ public class CallAndSendNotification {
                 + "Das INTRAAL-System wird bis dieser Vorgang nicht ausgeführt worden ist offline bleiben!";
 
         sm.sendMail(subject, text, email);
-       // ssms.sendSMS(sendTo, text, sendFrom);
+        ssms.sendSMS(sendTo, text, sendFrom);
     }
 
     private void sendTextSystemOnlineNotification(String email, String sendTo, String sendFrom) throws IOException {
@@ -102,7 +102,7 @@ public class CallAndSendNotification {
         String text = "Das System ist wieder Online!";
 
         sm.sendMail(subject, text, email);
-      //  ssms.sendSMS(sendTo, text, sendFrom);
+        ssms.sendSMS(sendTo, text, sendFrom);
     }
 
     private void sendTextPersonMovedNotification(String email, String sendTo, String sendFrom) throws IOException {

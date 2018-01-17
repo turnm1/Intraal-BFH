@@ -21,7 +21,7 @@ import java.util.Properties;
 public class KontaktInformationen {
     
         public static List<KontaktInformationen> loadKontaktInformationen() throws FileNotFoundException, IOException {
-        File propertiesFile = new File("C:\\Users\\turna\\Documents\\NetBeansProjects\\Intraal-BT\\src\\intraal\\bt\\system\\settings\\kontaktinformationen.properties"); // Pfad hier hinterlegen
+        File propertiesFile = new File("/home/pi/NetBeansProjects/Intraal-BT/dist/intraal_settings.properties"); // Metes Pfad: \\C:\\Users\\turna\\Documents\\NetBeansProjects\\Intraal-BT\\src\\intraal\\bt\\system\\settings\\kontaktinformationen.properties
         FileReader propertiesReader = new FileReader(propertiesFile);
         Properties props = new Properties();
         props.load(propertiesReader);

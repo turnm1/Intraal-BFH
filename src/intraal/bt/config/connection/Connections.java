@@ -83,16 +83,16 @@ public class Connections implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        System.out.print("- SUB: ");
+        //System.out.print("- SUB: ");
     }
 
     @Override
     public void connectionLost(Throwable cause) {
-        System.out.print("x DISC: "); // System.out.println(" ===== MQTT VERBINDUNG UNTERBROCKEN! ===== ");
+      //  System.out.print("x DISC: "); // System.out.println(" ===== MQTT VERBINDUNG UNTERBROCKEN! ===== ");
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
-        System.out.print("+ PUSH: "); //  System.out.println(" ===== MQTT MESSAGE GESENDET! ===== ");
+       // System.out.print("+ PUSH: "); //  System.out.println(" ===== MQTT MESSAGE GESENDET! ===== ");
     }
 }

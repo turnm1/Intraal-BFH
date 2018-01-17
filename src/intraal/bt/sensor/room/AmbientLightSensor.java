@@ -75,7 +75,7 @@ public class AmbientLightSensor {
             tinkerforge.setIlluminanceCallbackThreshold('o', s.getAmbientLightOff(), s.getAmbientLightOn());
             
         } catch (Exception ex) {
-            System.out.println("WIFI-Verbindung unterbrochen: "+ MODUL + "/" + ROOM + " IP: " + TINKERFORGE_IP);
+            System.out.println("x DISC: WIFI-Verbindung unterbrochen: "+ MODUL + "/" + ROOM + " IP: " + TINKERFORGE_IP);
         }
     }
 }

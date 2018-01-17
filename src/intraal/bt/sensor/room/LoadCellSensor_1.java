@@ -66,7 +66,6 @@ public class LoadCellSensor_1 {
                     }
                     
                     if (weight > OnOffBed && flag != 1) {
-                        System.out.println(weight+ " = " + OnOffBed);
                         String nachricht = "Not on the bed";
                         try {
                             con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
@@ -82,7 +81,7 @@ public class LoadCellSensor_1 {
             tinkerforge.setWeightCallbackPeriod(1000);
 
         } catch (Exception ex) {
-            System.out.println("WIFI-Verbindung unterbrochen: "+ MODUL + "/" + ROOM + " IP: " + TINKERFORGE_IP);
+            System.out.println("x DISC: WIFI-Verbindung unterbrochen: "+ MODUL + "/" + ROOM + " IP: " + TINKERFORGE_IP);
         }
     }
 }

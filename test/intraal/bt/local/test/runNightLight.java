@@ -13,10 +13,10 @@ import intraal.bt.algo.uc1.NightLightUC1;
  */
 public class runNightLight {
     
-    NightLightUC1 nl = new NightLightUC1();
+   // NightLightUC1 nl = new NightLightUC1();
     
      public void runNightLight()throws Exception {
-         nl.nightLight();
+    //     nl.nightLight();
     }
     
 

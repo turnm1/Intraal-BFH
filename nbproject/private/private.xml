@@ -3,16 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/algo/uc1/ActivityCheckOrginal.java</file>
-            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/config/connection/ConnectionParameters.java</file>
-            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/algo/uc1/OnePersonLokation.java</file>
             <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/execution/IntraalExecutor.java</file>
-            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/execution/TinkerforgeModulStatusCheckExecutor.java</file>
-            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/config/connection/ConnectionChecker.java</file>
-            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/algo/uc1/BedActivityTest.java</file>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/system/settings/IntraalEinstellungen.java</file>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/test/intraal/bt/local/test/runNightLight.java</file>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/config/connection/Connections.java</file>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/system/settings/intraal_settings.properties</file>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/system/settings/KontaktInformationen.java</file>
             <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/algo/uc1/AllAlgo.java</file>
-            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/execution/IntraalExecutor_1.java</file>
-            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/config/connection/rest/SmartMeService.java</file>
+            <file>file:/C:/Users/turna/Documents/NetBeansProjects/Intraal-BT/src/intraal/bt/config/connection/ConnectionTest.java</file>
         </group>
     </open-files>
 </project-private>

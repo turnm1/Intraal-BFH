@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Properties;
 
 
@@ -18,20 +19,14 @@ import java.util.Properties;
  */
 public class IntraalEinstellungen {
     
-    private int ambientLightOff = 200;
-    private int ambientLightOn = 300;
-    private int temperaturToHigh = 2500;
-    private int temperaturToLow = 2100;
-    private String startNightPhase = "20:00";
-    private String endNightPhase = "14:00";
-    private boolean demoModus = false;
-    private int warningTimeInMin = 10;  // sekunden
+
     
     public static IntraalEinstellungen Settings() throws FileNotFoundException, IOException {
-        File propertiesFile = new File(""); // Pfad hier hinterlegen
+        File propertiesFile = new File("/home/pi/NetBeansProjects/Intraal-BT/dist/intraal_settings.properties"); // Pfad hier hinterlegen C:\\Users\\turna\\Documents\\NetBeansProjects\\Intraal-BT\\src\\intraal\\bt\\system\\settings\\intraal_settings.properties
         FileReader propertiesReader = new FileReader(propertiesFile);
         Properties props = new Properties();
         props.load(propertiesReader);
+        
         IntraalEinstellungen settings = new IntraalEinstellungen();
         settings.setAmbientLightOff(Integer.parseInt(props.getProperty("LichtEinschalten")));
         settings.setAmbientLightOn(Integer.parseInt(props.getProperty("LichtAusschalten")));
@@ -40,9 +35,18 @@ public class IntraalEinstellungen {
         settings.setStartNightPhase(props.getProperty("NachtphaseStart"));
         settings.setEndNightPhase(props.getProperty("NachtphaseEnde"));
         settings.setDemoModus(props.getProperty("DemoModusEinschalten").equalsIgnoreCase("true"));
-        settings.setWarningTime(Integer.parseInt(props.getProperty("WarningTimer")));;
+        settings.setWarningTime(Integer.parseInt(props.getProperty("WarningTimer")));
         return settings;
     }
+    
+    private int ambientLightOff;
+    private int ambientLightOn;
+    private int temperaturToHigh;
+    private int temperaturToLow;
+    private String startNightPhase;
+    private String endNightPhase;
+    private boolean demoModus;
+    private int warningTimeInMin; // sekunden
 
     public int getWarningTime() {
         return warningTimeInMin;
