@@ -21,7 +21,7 @@ public class StartWohnzimmerModul implements Runnable{
     
     private final String tinkerforgeIP = cp.getTINKERFORGE_IP_WOHNZIMMER();
     private final String tinkerforgeIP2 = cp.getTINKERFORGE_IP_EINGANG2();
-    private final String room = "Wohnzimer";
+    private final String room = "Wohnzimmer";
     
     public void startWohnzimmerModul(){
     PassageSensor ps = new PassageSensor(tinkerforgeIP2, cp.getTINKERFORGE_SENSOR_UID_WOHNZIMMER_PASSAGE(), room);

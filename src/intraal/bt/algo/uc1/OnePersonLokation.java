@@ -5,8 +5,17 @@
  */
 package intraal.bt.algo.uc1;
 
+import com.tinkerforge.BrickletAmbientLightV2;
+import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
 import intraal.bt.config.connection.Connections;
+import intraal.bt.config.connection.siot.SiotDashboardInput;
+import intraal.bt.config.mqtt.MQTTCommunication;
+import intraal.bt.config.mqtt.MQTTParameters;
+import intraal.bt.system.settings.IntraalEinstellungen;
+import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -17,8 +26,13 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class OnePersonLokation implements MqttCallback {
 
-    ConnectionParameters cp;
-    Connections con;
+    ConnectionParameters con;
+    IPConnection ipcon;
+    MqttMessage message;
+    MQTTParameters p;
+    MQTTCommunication c;
+    WarningTimer w;
+    IntraalEinstellungen s;
 
     private String passageDetected = "0";
     
@@ -26,23 +40,57 @@ public class OnePersonLokation implements MqttCallback {
     private final String USECASENR = "Location";
     private final String USECASE = "Helper";
 
-
+    private void connectMQTT() throws Exception {
+        con = new ConnectionParameters();
+        c = new MQTTCommunication();
+        p = new MQTTParameters();
+        p.setClientID(con.getRASPBERRY_PI_MQTT_BROKER_TOPIC(UID));
+        p.setUserName(con.getRASPBERRY_PI_BENUTZER());
+        p.setPassword(con.getRASPBERRY_PI_PW());
+        p.setIsCleanSession(false);
+        p.setIsLastWillRetained(true);
+        p.setLastWillMessage("offline".getBytes());
+        p.setLastWillQoS(0);
+        p.setServerURIs(URI.create(con.getRASPBERRY_BROKER_CONNECTION()));
+        p.setWillTopic(con.getRASPBERRY_PI_MQTT_BROKER_LASTWILL(USECASE, USECASENR, UID));
+        p.setMqttCallback(this);
+        c.connect(p);
+        c.publishActualWill("online".getBytes());
+        p.getLastWillMessage();
+    }   
+    
+    
+    
     public void locationOfPerson() throws Exception {
-        con = new Connections();
-        con.getMQTTconnection(USECASE, USECASENR, UID);
-        con.subscribeMQTT();
+        c = new MQTTCommunication();
+        connectMQTT();
+        c.subscribe("Gateway/10.0.233.51/#", 0);
+    }
+    
+    private void pushMQTTmessage(String onBedOrNot) throws Exception {
+        message = new MqttMessage();
+        message.setRetained(true);
+        message.setQos(0);
+        message.setPayload((onBedOrNot).getBytes());
+        c.publish(con.getRASPBERRY_PI_MQTT_BROKER_CLIENT(USECASE, USECASENR, UID), message);
+        System.out.println(con.getRASPBERRY_PI_MQTT_BROKER_CLIENT(USECASE, USECASENR, UID) + ": " + message);
+    }
+
+    public void sendSIOTmessage(String siotKey, String messageText) throws Exception {
+        SiotDashboardInput sdi = new SiotDashboardInput();
+        sdi.setInputKey(siotKey);
+        sdi.setInputMessage(messageText);
+        sdi.sendInput();
     }
 
     private void pushLocation(String location) throws Exception{
-        con = new Connections();
-        con.getMQTTconnection(USECASE, USECASENR, UID);
-        con.sendMQTTmessage(USECASE, USECASENR, UID, location);
-        con.sendSIOTmessage(cp.getSIOT_SERVICE_INPUT_LOCATION_KEY(), location);
+        pushMQTTmessage(location);
+        sendSIOTmessage(con.getSIOT_SERVICE_INPUT_LOCATION_KEY(), location);
             if (location.equals("Haus verlassen")){
-                con.sendSIOTmessage(UID, location);
+                sendSIOTmessage(con.getSIOT_SERVICE_INPUT_LOCATION_KEY(), location);
             } else if (location.equals("Eingang")){
                 location = "Zu Hause";
-                con.sendSIOTmessage(cp.getSIOT_SERVICE_INPUT_LOCATION_KEY(), location);
+                sendSIOTmessage(con.getSIOT_SERVICE_INPUT_LOCATION_KEY(), location);
             }
         System.out.println("Position of Person: " + location);
     }

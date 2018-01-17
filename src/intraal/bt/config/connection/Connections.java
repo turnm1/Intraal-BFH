@@ -18,11 +18,11 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  *
  * @author turna
  */
-public class Connections implements MqttCallback{
-    
+public class Connections implements MqttCallback {
+
     ConnectionParameters con;
     MQTTCommunication c;
- 
+
     public void getMQTTconnection(String modul, String room, String uid) throws Exception {
         con = new ConnectionParameters();
         c = new MQTTCommunication();
@@ -40,14 +40,13 @@ public class Connections implements MqttCallback{
         c.connect(p);
         c.publishActualWill("online".getBytes());
         p.getLastWillMessage();
-    }
-    
-    public void subscribeMQTT(){
         c.subscribe("Gateway/10.0.233.51/#", 0);
     }
-    
-    public void sendMQTTmessage(String modul, String room, String uid, String messageText){
+
+    public void sendMQTTmessage(String modul, String room, String uid, String messageText) throws Exception {
+        //getMQTTconnection(modul, room, uid);
         MqttMessage message = new MqttMessage();
+        con = new ConnectionParameters();
         message.setRetained(true);
         message.setQos(0);
         message.setPayload((messageText).getBytes());
@@ -55,15 +54,26 @@ public class Connections implements MqttCallback{
         c.publish(con.getRASPBERRY_PI_MQTT_BROKER_CLIENT(modul, room, uid), message);
         System.out.println(con.getRASPBERRY_PI_MQTT_BROKER_CLIENT(modul, room, uid) + ": " + message);
     }
-    
-    public void sendSIOTmessage(String siotKey, String messageText) throws Exception{
-            SiotDashboardInput sdi = new SiotDashboardInput();
-            sdi.setInputKey(siotKey);
-            sdi.setInputMessage(messageText); 
-            sdi.sendInput();
+
+    public void sendMQTTtestMessage(String modul, String room, String uid, String messageText) {
+        MqttMessage message = new MqttMessage();
+        //c = new MQTTCommunication();
+        con = new ConnectionParameters();
+        message.setRetained(true);
+        message.setQos(0);
+        message.setPayload((messageText).getBytes());
+
+        c.publish(con.getRASPBERRY_PI_MQTT_BROKER_CLIENT(modul, room, uid), message);
+        System.out.println(con.getRASPBERRY_PI_MQTT_BROKER_CLIENT(modul, room, uid) + ": " + message);
     }
-    
-    
+
+    public void sendSIOTmessage(String siotKey, String messageText) throws Exception {
+        SiotDashboardInput sdi = new SiotDashboardInput();
+        sdi.setInputKey(siotKey);
+        sdi.setInputMessage(messageText);
+        sdi.sendInput();
+    }
+
     public void getTinkerforgeConnection(String tinkerforgeIP) throws Exception {
         IPConnection ipcon = new IPConnection();
         ConnectionParameters cp = new ConnectionParameters();
@@ -71,18 +81,18 @@ public class Connections implements MqttCallback{
         System.out.println("VERBINDUNG WURDE MIT TINKERFORGE HERGESTELLT: " + tinkerforgeIP);
     }
 
-        @Override
+    @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        System.out.print(""); // System.out.println(" ===== MQTT MESSAGE ERHALTEN! ===== ");
+        System.out.print("- SUB: ");
     }
 
     @Override
     public void connectionLost(Throwable cause) {
-        System.out.print(""); // System.out.println(" ===== MQTT VERBINDUNG UNTERBROCKEN! ===== ");
+        System.out.print("x DISC: "); // System.out.println(" ===== MQTT VERBINDUNG UNTERBROCKEN! ===== ");
     }
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
-      System.out.print(""); //  System.out.println(" ===== MQTT MESSAGE GESENDET! ===== ");
+        System.out.print("+ PUSH: "); //  System.out.println(" ===== MQTT MESSAGE GESENDET! ===== ");
     }
 }

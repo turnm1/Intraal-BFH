@@ -25,27 +25,33 @@ public class CallAndSendNotification {
     List<KontaktInformationen> kontaktinformationen;
 
     public void sendWarning(String email, String sendTo, String sendFrom, String message) throws IOException {
-        callWarningNotification(sendTo, sendFrom);
+        System.out.println("@ SEND: Gefahrensituation Meldung");
+       // callWarningNotification(sendTo, sendFrom);
         sendTextWarningNotification(email, sendTo, sendFrom, message);
     }
 
     public void sendSystemOffline(String email, String sendTo, String sendFrom, String offlineModulMessage) throws IOException {
+        System.out.println("@ SEND: System offline");
         sendTextSystemOfflineNotification(email, sendTo, sendFrom, offlineModulMessage);
     }
 
     public void sendSystemOnline(String email, String sendTo, String sendFrom) throws IOException {
+        System.out.println("@ SEND: System online");
         sendTextSystemOnlineNotification(email, sendTo, sendFrom);
     }
 
     public void sendMoving(String email, String sendTo, String sendFrom) throws IOException {
+        System.out.println("@ SEND: Person hat sich bewegt!");
         sendTextPersonMovedNotification(email, sendTo, sendFrom);
     }
 
     public void sendVisited(String email, String sendTo, String sendFrom) throws IOException {
+        System.out.println("@ SEND: Jemand ist zu Besuch in der Wohnung");
         sendTextVisitedNotification(email, sendTo, sendFrom);
     }
 
     private void callWarningNotification(String sendTo, String sendFrom) {
+        System.out.println("@ CALL: Ânruf wird gestartet");
         oc.makeOutCall(sendTo, sendFrom);
     }
 
@@ -67,7 +73,7 @@ public class CallAndSendNotification {
                 + "Sie werden sofort informiert, wenn sich die betroffene Person bewegt oder jemand vor Ihnen zu besuch gekommen ist.";
 
         sm.sendMail(subject, text, email);
-        ssms.sendSMS(sendTo, text, sendFrom);
+        //ssms.sendSMS(sendTo, text, sendFrom);
     }
 
     private void sendTextSystemOfflineNotification(String email, String sendTo, String sendFrom, String offlineModulMessage) throws IOException {

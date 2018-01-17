@@ -53,8 +53,8 @@ public class SiotDashboardInput {
         wr.flush();
         wr.close();
 
-        System.out.println("\nSending 'POST' request to URL : " + url);
-        System.out.println("SIOT Dashbaord: " + urlParameters);
+        //System.out.println("\nSending 'POST' request to URL : " + url);
+        //System.out.println("SIOT Dashbaord: " + urlParameters);
 
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;

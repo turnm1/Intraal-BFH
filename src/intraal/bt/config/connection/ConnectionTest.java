@@ -65,7 +65,7 @@ public class ConnectionTest {
     }
 
     public void testTinkerforgeModuls(int seconds) {
-        System.out.println("Testing startet:");
+        System.out.println("Testprogramm wird gestartet ...:");
         isRunning = true;
         timer = new Timer();
         if (isRunning = true) {
@@ -78,7 +78,7 @@ public class ConnectionTest {
         kontaktinformationen = KontaktInformationen.loadKontaktInformationen();
         KontaktInformationen ki = kontaktinformationen.get(0);
         System.out.println(isConnected);
-        if (number >= 7 && isConnected == false) {
+        if (number >= 7 && isConnected == true) {
             sendtext.sendSystemOnline(ki.getEmail(), ki.getTelefon(), cp.getTWILIO_SMS_NUMMER());
         } else if (isConnected == false) {
             // Stop Running!!!!
@@ -94,7 +94,6 @@ public class ConnectionTest {
             testTinkerforgeModul(ip);
             sendConnectionStatus(getOfflineStatusViaIP(ip), "online");
             count++;
-            System.out.println(count);
             isConnected = true;
             sendStatusMessage(count, isConnected, "Alles online");
         } catch (Exception ex) {

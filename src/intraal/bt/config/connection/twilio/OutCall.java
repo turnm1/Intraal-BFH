@@ -21,6 +21,6 @@ public class OutCall {
 
     Call.creator(new PhoneNumber(sendTo), new PhoneNumber(telefon), uri).create();
 
-    System.out.println("Anruf wird gestartet");
+    System.out.println("@ CALL: started");
   }
 }

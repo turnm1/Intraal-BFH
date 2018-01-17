@@ -10,6 +10,8 @@ import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
 import intraal.bt.config.connection.Connections;
 import intraal.bt.system.settings.IntraalEinstellungen;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -52,11 +54,19 @@ public class AmbientLightSensor {
                     
                     if (illuminance < s.getAmbientLightOff()) {
                         String nachricht = illuminance / 10.0 + " lux => Licht aus";
-                        con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                        try {
+                            con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                        } catch (Exception ex) {
+                            Logger.getLogger(AmbientLightSensor.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         
                     } else if (illuminance >= s.getAmbientLightOn()) {
                         String nachricht = illuminance / 10.0 + " lux => Licht ein";
-                        con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                        try {
+                            con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                        } catch (Exception ex) {
+                            Logger.getLogger(AmbientLightSensor.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
             });

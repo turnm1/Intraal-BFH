@@ -53,7 +53,7 @@ public class ConnectionParameters {
     
     private final String SMART_ME_PLUG_KEY_WOHNZIMMER = "5b9b3fea-cc8d-45ad-92b3-9caf3be725bc";
     private final String SMART_ME_PLUG_KEY_SCHLAFZIMMER = "ca224bf7-bf6c-4d74-93fe-da4de71cdbb6";
-    private final String SMART_ME_PLUG_KEY_KÜCHE = "30d97038-8857-4df6-b0c3-cf7e27a820c3";
+    private final String SMART_ME_PLUG_KEY_EINGANG = "30d97038-8857-4df6-b0c3-cf7e27a820c3";
     private final String SMART_ME_PLUG_KEY_BAD = "e3109c4e-b8f5-4687-88f6-38477d84f5ca";
     
     /*
@@ -232,8 +232,8 @@ public class ConnectionParameters {
         return SMART_ME_PLUG_KEY_SCHLAFZIMMER;
     }
 
-    public String getSMART_ME_PLUG_KEY_KÜCHE() {
-        return SMART_ME_PLUG_KEY_KÜCHE;
+    public String getSMART_ME_PLUG_KEY_EINGANG() {
+        return SMART_ME_PLUG_KEY_EINGANG;
     }
 
     public String getSMART_ME_PLUG_KEY_BAD() {

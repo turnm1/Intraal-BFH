@@ -10,6 +10,8 @@ import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
 import intraal.bt.config.connection.Connections;
 import intraal.bt.system.settings.IntraalEinstellungen;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,8 +26,8 @@ public class LoadCellSensor_1 {
     private final String ROOM;
     private final String MODUL;
     private final String TINKERFORGE_IP;
-    private static int flag;
-    private static int OnOffBed = 22500;
+    private static int flag = 0;
+    private static final int OnOffBed = -10000;
 
     public LoadCellSensor_1(String tinkerforgeIP, String uid, String room, String modul) {
         this.TINKERFORGE_IP = tinkerforgeIP;
@@ -53,16 +55,24 @@ public class LoadCellSensor_1 {
                 @Override
                 public void weight(int weight) {
 
-                    if (weight >= OnOffBed && flag != 0) {
-                        System.out.println(weight+ " = " + OnOffBed);
+                    if (weight <= OnOffBed && flag != 0) {
                         String nachricht = "On the bed";
-                        con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                        try {
+                            con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                        } catch (Exception ex) {
+                            Logger.getLogger(LoadCellSensor_1.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         flag = 0;
                     }
                     
-                    if (weight < OnOffBed && flag != 1) {
+                    if (weight > OnOffBed && flag != 1) {
+                        System.out.println(weight+ " = " + OnOffBed);
                         String nachricht = "Not on the bed";
-                        con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                        try {
+                            con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                        } catch (Exception ex) {
+                            Logger.getLogger(LoadCellSensor_1.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         flag = 1;
                     }
 

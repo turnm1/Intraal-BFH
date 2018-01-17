@@ -110,6 +110,6 @@ public class SendMail {
         ConnectionParameters cp = new ConnectionParameters();
               
         new SendMail().initMail(cp.getEMAIL_SMPT_AUTH(), cp.getEMAIL_BENUTZER(), cp.getEMAIL_PW(), cp.getEMAIL(), reciverEmail, subject, text);
-        System.out.println("Email wurde gesendet");
+       System.out.println("@ EMAIL: sended");
     }
 }

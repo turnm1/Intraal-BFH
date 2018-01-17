@@ -10,6 +10,8 @@ import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
 import intraal.bt.config.connection.Connections;
 import intraal.bt.system.settings.IntraalEinstellungen;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -49,12 +51,20 @@ public class TemperaturSensor {
             tinkerforge.addTemperatureListener((short temperature) -> {
                 if (temperature > s.getTemperaturToHigh()) {
                   String nachricht = temperature / 100.0 + " Grad => Hoch";
-                  con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                    try {
+                        con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                    } catch (Exception ex) {
+                        Logger.getLogger(TemperaturSensor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                         
                     
                 } else if (temperature <= s.getTemperaturToLow()) {
                      String nachricht = temperature / 100.0 + " Grad => Tief";
-                     con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                    try {
+                        con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                    } catch (Exception ex) {
+                        Logger.getLogger(TemperaturSensor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
             

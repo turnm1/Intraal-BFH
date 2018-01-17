@@ -9,6 +9,8 @@ import com.tinkerforge.BrickletDistanceIR;
 import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
 import intraal.bt.config.connection.Connections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -51,12 +53,20 @@ public class PassageSensor {
                 if (distance <= 350 && flag != 0) {
                     
                     String nachricht = "Passage Detected";
-                    con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                    try {
+                        con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                    } catch (Exception ex) {
+                        Logger.getLogger(PassageSensor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     flag = 0;                        
                     
                 } else if (distance > 350 && flag != 1) {
                     String nachricht = "No Passage";
-                    con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                    try {
+                        con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                    } catch (Exception ex) {
+                        Logger.getLogger(PassageSensor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     flag = 1;
                 }
             });

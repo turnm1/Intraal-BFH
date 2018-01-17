@@ -5,11 +5,8 @@
  */
 package intraal.bt.execution;
 
+import intraal.bt.algo.uc1.AllAlgo;
 import intraal.bt.config.connection.ConnectionChecker;
-import intraal.bt.algo.uc1.ActivityCheck;
-import intraal.bt.algo.uc1.BedActivity;
-import intraal.bt.algo.uc1.NightLightUC1;
-import intraal.bt.algo.uc1.OnePersonLokation;
 import intraal.bt.sensor.room.execution.StartBadModul;
 import intraal.bt.sensor.room.execution.StartEingangModul;
 import intraal.bt.sensor.room.execution.StartKücheModul;
@@ -36,38 +33,39 @@ public class IntraalExecutor implements Runnable{
         StartKücheModul küche = new StartKücheModul();
         StartSchlafzimmerModul schlafzimmer = new StartSchlafzimmerModul();
         
-//        wohnzimmer.startWohnzimmerModul();
-  //      eingang.startEingangModul();
-    //    schlafzimmer.startSchlafzimmerModul();
-      //  küche.startKücheModul();
-  //      bad.startBadModul();
+        wohnzimmer.startWohnzimmerModul();
+        eingang.startEingangModul();
+        schlafzimmer.startSchlafzimmerModul();
+        küche.startKücheModul();
+        bad.startBadModul();
         bett.startBettModul();
     }
     
     private void startAlgo() throws Exception{
         Thread connectionCheckerThread = new Thread(new ConnectionChecker());
-        OnePersonLokation opl = new OnePersonLokation();
-     //   NightLightUC1 nl = new NightLightUC1();
-    //    BedActivity ba = new BedActivity();
-    //    ActivityCheck ac = new ActivityCheck();
+        AllAlgo a = new AllAlgo();
         
         connectionCheckerThread.start();
-       opl.locationOfPerson();
-    //   nl.runNightLight();
-    //    ba.bedActivity();
+        a.runIntraalAlgo();
         
         
     }
     
     @Override
     public void run() {
-        startSensors();
+        try {
+            startSensors();
+            startAlgo();
+        } catch (Exception ex) {
+            Logger.getLogger(IntraalExecutor.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     
     public static void main(String[] args) {
+        System.out.println("INTRAAL Software wurde gestartet ...");
         IntraalExecutor IntraalSoftware = new IntraalExecutor();
         IntraalSoftware.run();
-        System.out.println("INTRAAL Software Läuft jetzt!");
+        
     }
 }

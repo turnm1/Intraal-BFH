@@ -5,8 +5,15 @@
  */
 package intraal.bt.algo.uc1;
 
+import intraal.bt.config.connection.ConnectionParameters;
+import intraal.bt.system.settings.IntraalEinstellungen;
+import intraal.bt.system.settings.KontaktInformationen;
+import java.io.IOException;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,33 +22,50 @@ import java.util.TimerTask;
 public class WarningTimer {
     
     Timer timer;
-    public static String activityStatus = "Activity Status: NORMAL";
+    RemindTask rt;
+    CallAndSendNotification message;
+    ConnectionParameters cp;
+    IntraalEinstellungen s;
+    List<KontaktInformationen> kontaktinformationen;
+    public static String activityStatus = "Normale Aktivitätsstatus in der Wohnung.";
 
     // 300 = 5 min
     public WarningTimer(int seconds) {
         System.out.println("Warning Timer started");
         timer = new Timer();
         timer.schedule(new RemindTask(), seconds*1000);
-    }
+    }    
     
     public void stopWarningTimer(){
         System.out.println("Warning Timer reseted");
         timer.cancel();
+        timer.purge();
+        //rt.cancel();
     }
+    
+    private void messageWarning() throws IOException{
+        kontaktinformationen = KontaktInformationen.loadKontaktInformationen();
+        KontaktInformationen ki = kontaktinformationen.get(0);
+        cp = new ConnectionParameters();
+        message = new CallAndSendNotification();
+        s = new IntraalEinstellungen();
+        activityStatus = "Es wurde seit " + s.getWarningTime()+ " Minuten keine Akvität in der Wohnung erkannt!";
+        System.err.println(activityStatus);
+        message.sendWarning(ki.getEmail(), ki.getTelefon(), cp.getTWILIO_SMS_NUMMER(), activityStatus);
+        timer.cancel();
+        timer.purge();
+    }
+        
+        
 
-    class RemindTask extends TimerTask {
+    class RemindTask extends TimerTask  {
+        
         public void run() {
-            activityStatus = "Activity Status: WARNING, long time no activity detected!";
-            System.err.println(activityStatus);
-            timer.cancel(); //Terminate the timer thread
+            try {
+                messageWarning();
+            } catch (IOException ex) {
+                Logger.getLogger(WarningTimer.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
-    
-    
-
-//    public static void main(String args[]) {
-//        System.out.println("About to schedule task.");
-//        new WarningTimer(60);
-//        System.out.println("Task scheduled.");
-//    }
 }

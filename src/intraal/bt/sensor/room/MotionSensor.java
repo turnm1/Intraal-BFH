@@ -10,6 +10,8 @@ import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
 import intraal.bt.config.connection.Connections;
 import intraal.bt.system.settings.IntraalEinstellungen;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -42,7 +44,6 @@ public class MotionSensor {
     
     public void doMotion() {
         Connections con = new Connections();
-        IntraalEinstellungen s = new IntraalEinstellungen();
     
         try {
             getTinkerforgeConnection();
@@ -50,12 +51,20 @@ public class MotionSensor {
           
             tinkerforge.addMotionDetectedListener(() -> {
                 String nachricht = "Motion Detected";
-                con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                try {
+                    con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                } catch (Exception ex) {
+                    Logger.getLogger(MotionSensor.class.getName()).log(Level.SEVERE, null, ex);
+                }
             });
             // Add detection cycle ended listener
             tinkerforge.addDetectionCycleEndedListener(() -> {
                 String nachricht = "Motion Ended";
-                con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                try {
+                    con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                } catch (Exception ex) {
+                    Logger.getLogger(MotionSensor.class.getName()).log(Level.SEVERE, null, ex);
+                }
             });
             
         } catch (Exception ex) {

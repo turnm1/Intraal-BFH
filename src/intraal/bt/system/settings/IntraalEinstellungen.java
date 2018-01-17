@@ -22,10 +22,10 @@ public class IntraalEinstellungen {
     private int ambientLightOn = 300;
     private int temperaturToHigh = 2500;
     private int temperaturToLow = 2100;
-    private String startNightPhase = "16:00";
-    private String endNightPhase = "10:00";
+    private String startNightPhase = "20:00";
+    private String endNightPhase = "14:00";
     private boolean demoModus = false;
-    private int warnintTime = 15;
+    private int warningTimeInMin = 10;  // sekunden
     
     public static IntraalEinstellungen Settings() throws FileNotFoundException, IOException {
         File propertiesFile = new File(""); // Pfad hier hinterlegen
@@ -40,16 +40,16 @@ public class IntraalEinstellungen {
         settings.setStartNightPhase(props.getProperty("NachtphaseStart"));
         settings.setEndNightPhase(props.getProperty("NachtphaseEnde"));
         settings.setDemoModus(props.getProperty("DemoModusEinschalten").equalsIgnoreCase("true"));
-        settings.setWarnintTime(Integer.parseInt(props.getProperty("WarningTimer")));;
+        settings.setWarningTime(Integer.parseInt(props.getProperty("WarningTimer")));;
         return settings;
     }
 
-    public int getWarnintTime() {
-        return warnintTime;
+    public int getWarningTime() {
+        return warningTimeInMin;
     }
 
-    public void setWarnintTime(int warnintTime) {
-        this.warnintTime = warnintTime;
+    public void setWarningTime(int warnintTime) {
+        this.warningTimeInMin = warnintTime;
     }
     
     public int getTemperaturToLow() {

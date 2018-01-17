@@ -22,6 +22,6 @@ public class SendSMS {
     
     Message.creator(new PhoneNumber(sendTo), new PhoneNumber(sendFrom), text).create();
 
-    System.out.println("SMS wurde gesendet");
+   System.out.println("@ SMS: sended");
   }
 }

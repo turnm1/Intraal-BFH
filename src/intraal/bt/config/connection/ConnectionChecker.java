@@ -25,7 +25,7 @@ public class ConnectionChecker implements Runnable {
                 Logger.getLogger(ConnectionChecker.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
-                 Thread.sleep(1 * 60 * 1000);
+                 Thread.sleep(10 * 60 * 1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(ConnectionChecker.class.getName()).log(Level.SEVERE, null, ex);
             }
