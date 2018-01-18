@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package intraal.bt.algo.uc1;
+package intraal.bt.algorithm;
 
 import intraal.bt.config.connection.ConnectionParameters;
 import intraal.bt.config.connection.rest.SendMail;
 import intraal.bt.config.connection.twilio.OutCall;
 import intraal.bt.config.connection.twilio.SendSMS;
+import intraal.bt.system.settings.IntraalEinstellungen;
 import intraal.bt.system.settings.KontaktInformationen;
 import java.io.IOException;
 import java.util.List;
@@ -23,10 +24,10 @@ public class CallAndSendNotification {
     SendSMS ssms = new SendSMS();
     OutCall oc = new OutCall();
     List<KontaktInformationen> kontaktinformationen;
+    IntraalEinstellungen s;
 
     public void sendWarning(String email, String sendTo, String sendFrom, String message) throws IOException {
         System.out.println("@ SEND: Gefahrensituation Meldung");
-        callWarningNotification(sendTo, sendFrom);
         sendTextWarningNotification(email, sendTo, sendFrom, message);
     }
 
@@ -50,15 +51,20 @@ public class CallAndSendNotification {
         sendTextVisitedNotification(email, sendTo, sendFrom);
     }
 
-    private void callWarningNotification(String sendTo, String sendFrom) {
-        System.out.println("@ CALL: Ânruf wird gestartet");
+    private void callWarningNotification(String sendTo, String sendFrom) throws IOException {
+                s = new IntraalEinstellungen();
+        IntraalEinstellungen setting = s.Settings();
+        System.out.println(setting.getStartCall());
+        if (setting.getStartCall()== 1 ){
+                   System.out.println("@ CALL: Ânruf wird gestartet");
         oc.makeOutCall(sendTo, sendFrom);
+        }
     }
 
     private void sendTextWarningNotification(String email, String sendTo, String sendFrom, String message) throws IOException {
         kontaktinformationen = KontaktInformationen.loadKontaktInformationen();
         KontaktInformationen bi = kontaktinformationen.get(1);
-
+        s = new IntraalEinstellungen();
         String subject = "*** INTRAAL Meldung ***";
         String text = "Es wurde eine Gefahrensituation erkannt!" + "\n"
                 + "Betroffene Person: " + bi.getPrename()+ " " + bi.getName()+ "\n"
@@ -72,8 +78,14 @@ public class CallAndSendNotification {
                 + "" + "\n"
                 + "Sie werden sofort informiert, wenn sich die betroffene Person bewegt oder jemand vor Ihnen zu besuch gekommen ist.";
 
-        sm.sendMail(subject, text, email);
-        ssms.sendSMS(sendTo, text, sendFrom);
+        s = new IntraalEinstellungen();
+        IntraalEinstellungen setting = s.Settings();
+        if (setting.getSendSMS() == 1){
+            ssms.sendSMS(sendTo, text, sendFrom);
+        }
+        if (setting.getSendEMail()== 1) {
+            sm.sendMail(subject, text, email);
+        }
     }
 
     private void sendTextSystemOfflineNotification(String email, String sendTo, String sendFrom, String offlineModulMessage) throws IOException {
@@ -92,8 +104,15 @@ public class CallAndSendNotification {
                 + "\n"
                 + "Das INTRAAL-System wird bis dieser Vorgang nicht ausgeführt worden ist offline bleiben!";
 
-        sm.sendMail(subject, text, email);
-        ssms.sendSMS(sendTo, text, sendFrom);
+        s = new IntraalEinstellungen();
+        IntraalEinstellungen setting = s.Settings();
+        System.out.println(setting.getSendSMS());
+        if (setting.getSendSMS() == 1){
+            ssms.sendSMS(sendTo, text, sendFrom);
+        }
+        if (setting.getSendEMail()== 1) {
+            sm.sendMail(subject, text, email);
+        }
     }
 
     private void sendTextSystemOnlineNotification(String email, String sendTo, String sendFrom) throws IOException {
@@ -101,8 +120,14 @@ public class CallAndSendNotification {
         String subject = "*** INTRAAL Meldung ***";
         String text = "Das System ist wieder Online!";
 
-        sm.sendMail(subject, text, email);
-        ssms.sendSMS(sendTo, text, sendFrom);
+        s = new IntraalEinstellungen();
+        IntraalEinstellungen setting = s.Settings();
+        if (setting.getSendSMS() == 1){
+            ssms.sendSMS(sendTo, text, sendFrom);
+        }
+        if (setting.getSendEMail()== 1) {
+            sm.sendMail(subject, text, email);
+        }
     }
 
     private void sendTextPersonMovedNotification(String email, String sendTo, String sendFrom) throws IOException {
@@ -120,8 +145,14 @@ public class CallAndSendNotification {
                 + "" + "\n"
                 + "Sie werden sofort informiert, wenn sich die betroffene Person bewegt oder jemand vor Ihnen zu besuch gekommen ist.";
 
-        sm.sendMail(subject, text, email);
-        ssms.sendSMS(sendTo, text, sendFrom);
+        s = new IntraalEinstellungen();
+        IntraalEinstellungen setting = s.Settings();
+        if (setting.getSendSMS() == 1){
+            ssms.sendSMS(sendTo, text, sendFrom);
+        }
+        if (setting.getSendEMail()== 1) {
+            sm.sendMail(subject, text, email);
+        }
     }
 
     private void sendTextVisitedNotification(String email, String sendTo, String sendFrom) throws IOException {
@@ -137,18 +168,24 @@ public class CallAndSendNotification {
                 + "" + "\n"
                 + "Bitte vergewissern Sie sich, dass die betroffene Person wieder in Sicherheit ist.";
 
-        sm.sendMail(subject, text, email);
-        ssms.sendSMS(sendTo, text, sendFrom);
+        s = new IntraalEinstellungen();
+        IntraalEinstellungen setting = s.Settings();
+        if (setting.getSendSMS() == 1){
+            ssms.sendSMS(sendTo, text, sendFrom);
+        }
+        if (setting.getSendEMail()== 1) {
+            sm.sendMail(subject, text, email);
+        }
     }
     
 
-    // Test = OK!
-//    public static void main(String[] args) throws IOException {
-//        CallAndSendNotification c = new CallAndSendNotification();
-//        List<KontaktInformationen> kontaktinformationen = KontaktInformationen.loadKontaktInformationen();
-//        KontaktInformationen ki = kontaktinformationen.get(0);
-//        ConnectionParameters cp = new ConnectionParameters();
-//        System.out.println(ki.getEmail() + ki.getTelefon() + cp.getTWILIO_SMS_NUMMER() + "test problem");
-//        c.sendSystemOffline(ki.getEmail(), ki.getTelefon(), cp.getTWILIO_SMS_NUMMER(), "test problem");
-//    }
+    public static void main(String[] args) throws IOException {
+        CallAndSendNotification c = new CallAndSendNotification();
+        List<KontaktInformationen> kontaktinformationen = KontaktInformationen.loadKontaktInformationen();
+        KontaktInformationen ki = kontaktinformationen.get(0);
+        ConnectionParameters cp = new ConnectionParameters();
+        System.out.println(ki.getEmail() + "41788312364"+ cp.getTWILIO_SMS_NUMMER() + "Gefahr erkannt! (TEST)");
+        c.sendTextWarningNotification(ki.getEmail(), "41788312364", cp.getTWILIO_SMS_NUMMER(), "Gefahr wurde erkannt! (TEST)");
+        c.callWarningNotification("41788312364", cp.getTWILIO_SMS_NUMMER());
+    }
 }

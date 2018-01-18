@@ -5,7 +5,7 @@
  */
 package intraal.bt.local.test;
 
-import intraal.bt.algo.uc1.OnePersonLokation;
+import intraal.bt.algorithm.OnePersonLokation;
 
 /**
  *

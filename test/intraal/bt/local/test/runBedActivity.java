@@ -5,7 +5,7 @@
  */
 package intraal.bt.local.test;
 
-import intraal.bt.algo.uc1.BedActivity;
+import intraal.bt.algorithm.BedActivity;
 
 /**
  *

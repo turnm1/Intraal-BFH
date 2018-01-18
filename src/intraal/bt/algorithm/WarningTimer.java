@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package intraal.bt.algo.uc1;
+package intraal.bt.algorithm;
 
 import intraal.bt.config.connection.ConnectionParameters;
 import intraal.bt.system.settings.IntraalEinstellungen;
@@ -33,7 +33,7 @@ public class WarningTimer {
     public WarningTimer(int seconds) {
         System.out.println("Warning Timer started");
         timer = new Timer();
-        timer.schedule(new RemindTask(), seconds*1000);
+        timer.schedule(new RemindTask(), seconds);
     }    
     
     public void stopWarningTimer(){
@@ -49,8 +49,6 @@ public class WarningTimer {
         cp = new ConnectionParameters();
         message = new CallAndSendNotification();
         s = new IntraalEinstellungen();
-        activityStatus = "Es wurde seit " + s.getWarningTime()+ " Minuten keine Akvität in der Wohnung erkannt!";
-        System.err.println(activityStatus);
         message.sendWarning(ki.getEmail(), ki.getTelefon(), cp.getTWILIO_SMS_NUMMER(), activityStatus);
         timer.cancel();
         timer.purge();

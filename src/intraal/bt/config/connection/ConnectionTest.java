@@ -1,7 +1,7 @@
 package intraal.bt.config.connection;
 
 import com.tinkerforge.IPConnection;
-import intraal.bt.algo.uc1.CallAndSendNotification;
+import intraal.bt.algorithm.CallAndSendNotification;
 import intraal.bt.system.settings.KontaktInformationen;
 import java.io.IOException;
 import java.util.List;
@@ -77,7 +77,6 @@ public class ConnectionTest {
         sendtext = new CallAndSendNotification();
         kontaktinformationen = KontaktInformationen.loadKontaktInformationen();
         KontaktInformationen ki = kontaktinformationen.get(0);
-        System.out.println(isConnected);
         if (number == 7 && isConnected == true) {
             sendtext.sendSystemOnline(ki.getEmail(), ki.getTelefon(), cp.getTWILIO_SMS_NUMMER());
         } else if (isConnected == false) {

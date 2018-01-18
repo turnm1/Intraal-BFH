@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package intraal.bt.config.mqtt;
+package intraal.bt.config.connection.mqtt;
 
 import java.net.URI;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 
 /**
  *
- * @author reto
+ * @author reto, mete
  */
 public class MQTTParameters {
 

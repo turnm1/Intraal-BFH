@@ -5,7 +5,7 @@
  */
 package intraal.bt.local.test;
 
-import intraal.bt.algo.uc1.NightLightUC1;
+import intraal.bt.algorithm.NightLightUC1;
 
 /**
  *

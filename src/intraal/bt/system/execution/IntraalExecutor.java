@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package intraal.bt.execution;
+package intraal.bt.system.execution;
 
-import intraal.bt.algo.uc1.AllAlgo;
+import intraal.bt.algorithm.AllAlgo;
 import intraal.bt.config.connection.ConnectionChecker;
 import intraal.bt.sensor.room.execution.StartBadModul;
 import intraal.bt.sensor.room.execution.StartEingangModul;

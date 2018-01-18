@@ -7,8 +7,8 @@ package intraal.bt.config.connection;
 
 import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.siot.SiotDashboardInput;
-import intraal.bt.config.mqtt.MQTTCommunication;
-import intraal.bt.config.mqtt.MQTTParameters;
+import intraal.bt.config.connection.mqtt.MQTTCommunication;
+import intraal.bt.config.connection.mqtt.MQTTParameters;
 import java.net.URI;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -65,6 +65,17 @@ public class Connections implements MqttCallback {
 
         c.publish(con.getRASPBERRY_PI_MQTT_BROKER_CLIENT(modul, room, uid), message);
         System.out.println(con.getRASPBERRY_PI_MQTT_BROKER_CLIENT(modul, room, uid) + ": " + message);
+    }
+    
+      public void sendMQTTSilenceMessage(String modul, String room, String uid, String messageText) {
+        MqttMessage message = new MqttMessage();
+        //c = new MQTTCommunication();
+        con = new ConnectionParameters();
+        message.setRetained(true);
+        message.setQos(0);
+        message.setPayload((messageText).getBytes());
+
+        c.publish(con.getRASPBERRY_PI_MQTT_BROKER_CLIENT(modul, room, uid), message);
     }
 
     public void sendSIOTmessage(String siotKey, String messageText) throws Exception {

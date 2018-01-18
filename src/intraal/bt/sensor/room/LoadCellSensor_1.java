@@ -26,7 +26,7 @@ public class LoadCellSensor_1 {
     private final String ROOM;
     private final String MODUL;
     private final String TINKERFORGE_IP;
-    private static int flag = 0;
+    private static int flag;
     private static final int OnOffBed = -10000;
 
     public LoadCellSensor_1(String tinkerforgeIP, String uid, String room, String modul) {
@@ -36,6 +36,7 @@ public class LoadCellSensor_1 {
         this.MODUL = modul;
     }
     
+
     private void getTinkerforgeConnection() throws Exception {
         IPConnection ipcon = new IPConnection();
         cp = new ConnectionParameters();

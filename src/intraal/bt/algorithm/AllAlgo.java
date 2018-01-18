@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package intraal.bt.algo.uc1;
+package intraal.bt.algorithm;
 
 import com.tinkerforge.IPConnection;
 import intraal.bt.config.connection.ConnectionParameters;
 import intraal.bt.config.connection.rest.SmartMeService;
 import intraal.bt.config.connection.siot.SiotDashboardInput;
-import intraal.bt.config.mqtt.MQTTCommunication;
-import intraal.bt.config.mqtt.MQTTParameters;
+import intraal.bt.config.connection.mqtt.MQTTCommunication;
+import intraal.bt.config.connection.mqtt.MQTTParameters;
 import intraal.bt.system.settings.IntraalEinstellungen;
 import intraal.bt.system.settings.KontaktInformationen;
 import java.io.IOException;
@@ -47,7 +47,10 @@ public class AllAlgo implements MqttCallback {
     private final String CASE = "INTRAAL";
 
     private static boolean isNigh;
+    private static boolean isInHouse;
     private int flag = 0;
+    private int flag2 = 0;
+    private int flag3 = 0;
     private String passageDetected = "0";
     private static int errorOne = 0;
     private static boolean onBed;
@@ -124,12 +127,10 @@ public class AllAlgo implements MqttCallback {
     // push Location Algo
     private void pushLocation(String location) throws Exception {
         pushMQTTmessage("Helper", "Location1", location, location);
-        sendSIOTmessage(con.getSIOT_SERVICE_INPUT_LOCATION_KEY(), location);
         if (location.equals("Haus verlassen")) {
-            sendSIOTmessage(con.getSIOT_SERVICE_INPUT_LOCATION_KEY(), location);
+                isInHouse = false;
         } else if (location.equals("Eingang")) {
-            location = "Zu Hause";
-            sendSIOTmessage(con.getSIOT_SERVICE_INPUT_LOCATION_KEY(), location);
+                isInHouse = true;
         }
     }
 
@@ -149,12 +150,13 @@ public class AllAlgo implements MqttCallback {
 
     // push House Activity Algo
     private void pushHouseActivity(int warningTime) throws Exception {
-      //  System.out.println(isMotionEnded1 + isMotionEnded2 + isMotionEnded3 + isMotionEnded4 + isMotionEnded5);
+       //System.out.println(isMotionEnded1 + isMotionEnded2 + isMotionEnded3 + isMotionEnded4 + isMotionEnded5);
 
             if (isMotionEnded1 + isMotionEnded2 + isMotionEnded3 + isMotionEnded4 + isMotionEnded5 == 3 && errorOne >= 5) {
                int warningTimeInMin = warningTime * 60; 
-               w = new WarningTimer(warningTimeInMin);
-               pushMQTTmessage("Helper", "HouseActivity", "WarningTimerStarted", warningTime + "");
+                w = new WarningTimer(warningTimeInMin);
+                String warningMQTTMessage = "Es wird in "+warningTimeInMin+" Sekunden eine Warnung an die Kontaktperson versendet!";
+                pushMQTTmessage("Helper", "HouseActivity", "WarningTimerStarted", warningMQTTMessage + "");
             } else {
                 errorOne++;
         }
@@ -170,7 +172,7 @@ public class AllAlgo implements MqttCallback {
             return new Date(0);
         }
     }
-
+    
     private boolean isNight() throws IOException {
         s = new IntraalEinstellungen();
         IntraalEinstellungen setting = s.Settings();
@@ -194,8 +196,12 @@ public class AllAlgo implements MqttCallback {
         con = new ConnectionParameters();
         SmartMeService sme = new SmartMeService();
         if (isNight() == true && flag >= 0) {
-            flag = 0;
-            
+            if (isInHouse== true && flag2 >= 0){
+
+               if (messageVal.equals("Bad-Modul = online")){
+                    flag3++;
+                }
+                
             if (messageVal.equals("On the bed")) {
                 sme.switchLightStatus(con.getSMART_ME_PLUG_KEY_BAD(), "false");
                 pushLight(con.getSMART_ME_PLUG_KEY_BAD(), "false");
@@ -206,7 +212,8 @@ public class AllAlgo implements MqttCallback {
                 sme.switchLightStatus(con.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "false");
                 pushLight(con.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "false");
             } else 
-            
+                
+             if (flag3 >= 3) {
             if (algoTyp.equals("Helper")) {
                 if (algoCase.equals("BedActivity")) {
                  if (messageVal.equals("Not on the bed")) {
@@ -294,7 +301,19 @@ public class AllAlgo implements MqttCallback {
                     }
                 }
             }
-
+            }
+            } else if (isInHouse == false && flag2 == 0){
+                sme.switchLightStatus(con.getSMART_ME_PLUG_KEY_BAD(), "false");
+                pushLight(con.getSMART_ME_PLUG_KEY_BAD(), "false");
+                sme.switchLightStatus(con.getSMART_ME_PLUG_KEY_EINGANG(), "false");
+                pushLight(con.getSMART_ME_PLUG_KEY_EINGANG(), "false");
+                sme.switchLightStatus(con.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "false");
+                pushLight(con.getSMART_ME_PLUG_KEY_SCHLAFZIMMER(), "false");
+                sme.switchLightStatus(con.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "false");
+                pushLight(con.getSMART_ME_PLUG_KEY_WOHNZIMMER(), "false");
+                flag2++;
+            }
+            
         } else if (isNight() == false && flag == 0) {
             sme.switchLightStatus(con.getSMART_ME_PLUG_KEY_BAD(), "false");
             pushLight(con.getSMART_ME_PLUG_KEY_BAD(), "false");

@@ -55,7 +55,7 @@ public class AmbientLightSensor {
                     if (illuminance < s.getAmbientLightOff()) {
                         String nachricht = illuminance / 10.0 + " lux => Licht aus";
                         try {
-                            con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                            con.sendMQTTSilenceMessage(MODUL, ROOM, UID, nachricht);
                         } catch (Exception ex) {
                             Logger.getLogger(AmbientLightSensor.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -63,7 +63,7 @@ public class AmbientLightSensor {
                     } else if (illuminance >= s.getAmbientLightOn()) {
                         String nachricht = illuminance / 10.0 + " lux => Licht ein";
                         try {
-                            con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                            con.sendMQTTSilenceMessage(MODUL, ROOM, UID, nachricht);
                         } catch (Exception ex) {
                             Logger.getLogger(AmbientLightSensor.class.getName()).log(Level.SEVERE, null, ex);
                         }

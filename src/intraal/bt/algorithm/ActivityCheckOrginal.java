@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package intraal.bt.algo.uc1;
+package intraal.bt.algorithm;
 
 import intraal.bt.config.connection.ConnectionParameters;
 import intraal.bt.config.connection.Connections;

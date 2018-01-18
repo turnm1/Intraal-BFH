@@ -12,11 +12,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author turna The JSON of Device Get Request "Id":
- * "ca224bf7-bf6c-4d74-93fe-da4de71cdbb6", "Name": "sm-Eingang", "Serial":
- * 102020, "DeviceEnergyType": 1, "FamilyType": 1, "CounterReading": 0.404,
- * "CounterReadingUnit": "kWh", "CounterReadingT1": 0.404, "SwitchOn": true,
- * "ValueDate": "2017-11-03T15:27:03.622Z"
+ * @author turna 
  */
 public class Device {
 

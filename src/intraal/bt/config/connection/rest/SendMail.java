@@ -105,11 +105,18 @@ public class SendMail {
             return new PasswordAuthentication(this.user, this.password);
         }
     }
-   
-    public static void sendMail(String subject, String text, String reciverEmail){
+    
+    public void sendMail(String subject, String text, String reciverEmail){
         ConnectionParameters cp = new ConnectionParameters();
               
         new SendMail().initMail(cp.getEMAIL_SMPT_AUTH(), cp.getEMAIL_BENUTZER(), cp.getEMAIL_PW(), cp.getEMAIL(), reciverEmail, subject, text);
        System.out.println("@ EMAIL: sended");
     }
+   
+//    public static void sendMail(String subject, String text, String reciverEmail){
+//        ConnectionParameters cp = new ConnectionParameters();
+//              
+//        new SendMail().initMail(cp.getEMAIL_SMPT_AUTH(), cp.getEMAIL_BENUTZER(), cp.getEMAIL_PW(), cp.getEMAIL(), reciverEmail, subject, text);
+//       System.out.println("@ EMAIL: sended");
+//    }
 }

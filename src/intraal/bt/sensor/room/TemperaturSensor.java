@@ -52,7 +52,7 @@ public class TemperaturSensor {
                 if (temperature > s.getTemperaturToHigh()) {
                   String nachricht = temperature / 100.0 + " Grad => Hoch";
                     try {
-                        con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                        con.sendMQTTSilenceMessage(MODUL, ROOM, UID, nachricht);
                     } catch (Exception ex) {
                         Logger.getLogger(TemperaturSensor.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -61,7 +61,7 @@ public class TemperaturSensor {
                 } else if (temperature <= s.getTemperaturToLow()) {
                      String nachricht = temperature / 100.0 + " Grad => Tief";
                     try {
-                        con.sendMQTTmessage(MODUL, ROOM, UID, nachricht);
+                        con.sendMQTTSilenceMessage(MODUL, ROOM, UID, nachricht);
                     } catch (Exception ex) {
                         Logger.getLogger(TemperaturSensor.class.getName()).log(Level.SEVERE, null, ex);
                     }

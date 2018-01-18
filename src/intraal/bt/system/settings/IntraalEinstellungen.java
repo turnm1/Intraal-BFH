@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Properties;
 
 
@@ -22,7 +21,8 @@ public class IntraalEinstellungen {
 
     
     public static IntraalEinstellungen Settings() throws FileNotFoundException, IOException {
-        File propertiesFile = new File("/home/pi/NetBeansProjects/Intraal-BT/dist/intraal_settings.properties"); // Pfad hier hinterlegen C:\\Users\\turna\\Documents\\NetBeansProjects\\Intraal-BT\\src\\intraal\\bt\\system\\settings\\intraal_settings.properties
+        //File propertiesFile = new File("/home/pi/NetBeansProjects/Intraal-BT/dist/intraal_settings.properties"); // Pfad hier hinterlegen C:\\Users\\turna\\Documents\\NetBeansProjects\\Intraal-BT\\src\\intraal\\bt\\system\\settings\\intraal_settings.properties
+        File propertiesFile = new File("C:\\Users\\turna\\Documents\\NetBeansProjects\\Intraal-BT_check\\src\\intraal\\bt\\system\\settings\\intraal_settings.properties"); // Metes Pfad
         FileReader propertiesReader = new FileReader(propertiesFile);
         Properties props = new Properties();
         props.load(propertiesReader);
@@ -36,9 +36,16 @@ public class IntraalEinstellungen {
         settings.setEndNightPhase(props.getProperty("NachtphaseEnde"));
         settings.setDemoModus(props.getProperty("DemoModusEinschalten").equalsIgnoreCase("true"));
         settings.setWarningTime(Integer.parseInt(props.getProperty("WarningTimer")));
+        settings.setSendSMS(Integer.parseInt(props.getProperty("SendSMS")));
+        settings.setSendEMail(Integer.parseInt(props.getProperty("SendEMail")));
+        settings.setStartCall(Integer.parseInt(props.getProperty("StartCall")));
         return settings;
     }
     
+    
+    private int sendSMS;
+    private int sendEMail;
+    private int startCall;
     private int ambientLightOff;
     private int ambientLightOn;
     private int temperaturToHigh;
@@ -47,6 +54,33 @@ public class IntraalEinstellungen {
     private String endNightPhase;
     private boolean demoModus;
     private int warningTimeInMin; // sekunden
+
+    public void setSendEMail(int sendEMail) {
+        this.sendEMail = sendEMail;
+    }
+
+    public void setSendSMS(int sendSMS) {
+        this.sendSMS = sendSMS;
+    }
+
+    public void setStartCall(int startCall) {
+        this.startCall = startCall;
+    }
+
+    public int getSendEMail() {
+        return sendEMail;
+    }
+
+    public int getSendSMS() {
+        return sendSMS;
+    }
+
+    public int getStartCall() {
+        return startCall;
+    }
+
+
+    
 
     public int getWarningTime() {
         return warningTimeInMin;
