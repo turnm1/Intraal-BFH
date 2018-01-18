@@ -82,10 +82,11 @@ public class AllAlgo implements MqttCallback {
     public void runIntraalAlgo() {
         try {
             connectMQTT();
-            c.subscribe("Gateway/10.0.233.51/#", 0);
         } catch (Exception ex) {
-            Logger.getLogger(BedActivityTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AllAlgo.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Verbindung mit dem INTRAAL-Algo Subscriber konnte nicht hergestellt werden!");
         }
+            c.subscribe("Gateway/10.0.233.51/#", 0);
     }
 
     private void pushMQTTmessage(String usecase, String room, String modul, String pushMessage) throws Exception {
@@ -151,7 +152,6 @@ public class AllAlgo implements MqttCallback {
     // push House Activity Algo
     private void pushHouseActivity(int warningTime) throws Exception {
        //System.out.println(isMotionEnded1 + isMotionEnded2 + isMotionEnded3 + isMotionEnded4 + isMotionEnded5);
-
             if (isMotionEnded1 + isMotionEnded2 + isMotionEnded3 + isMotionEnded4 + isMotionEnded5 == 3 && errorOne >= 5) {
                int warningTimeInMin = warningTime * 60; 
                 w = new WarningTimer(warningTimeInMin);

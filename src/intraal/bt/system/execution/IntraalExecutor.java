@@ -6,7 +6,7 @@
 package intraal.bt.system.execution;
 
 import intraal.bt.algorithm.AllAlgo;
-import intraal.bt.config.connection.ConnectionChecker;
+import intraal.bt.config.connection.ConnectionCheckerExecution;
 import intraal.bt.sensor.room.execution.StartBadModul;
 import intraal.bt.sensor.room.execution.StartEingangModul;
 import intraal.bt.sensor.room.execution.StartKücheModul;
@@ -42,7 +42,7 @@ public class IntraalExecutor implements Runnable{
     }
     
     private void startAlgo() throws Exception{
-        Thread connectionCheckerThread = new Thread(new ConnectionChecker());
+        Thread connectionCheckerThread = new Thread(new ConnectionCheckerExecution());
         AllAlgo a = new AllAlgo();
         
         connectionCheckerThread.start();

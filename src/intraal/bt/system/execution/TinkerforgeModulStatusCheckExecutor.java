@@ -5,7 +5,7 @@
  */
 package intraal.bt.system.execution;
 
-import intraal.bt.config.connection.ConnectionChecker;
+import intraal.bt.config.connection.ConnectionCheckerExecution;
 
 /**
  *
@@ -14,7 +14,7 @@ import intraal.bt.config.connection.ConnectionChecker;
 public class TinkerforgeModulStatusCheckExecutor {
     
     public static void main(String[] args) {
-        Thread connectionCheckerThread = new Thread(new ConnectionChecker());
+        Thread connectionCheckerThread = new Thread(new ConnectionCheckerExecution());
         connectionCheckerThread.start();
         System.out.println("Tinkerforge Module werden getestet ...");
     }

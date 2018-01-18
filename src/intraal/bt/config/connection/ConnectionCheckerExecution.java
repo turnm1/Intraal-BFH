@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  *
  * @author turna
  */
-public class ConnectionChecker implements Runnable {
+public class ConnectionCheckerExecution implements Runnable {
 
     @Override
     public void run() {
@@ -22,18 +22,18 @@ public class ConnectionChecker implements Runnable {
             try {
                 test.testTinkerforgeModuls(2500);               
             } catch (Exception ex) {
-                Logger.getLogger(ConnectionChecker.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ConnectionCheckerExecution.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
                  Thread.sleep(10 * 60 * 1000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(ConnectionChecker.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ConnectionCheckerExecution.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
     
     public static void main(String[] args) {
-        ConnectionChecker c = new ConnectionChecker();
+        ConnectionCheckerExecution c = new ConnectionCheckerExecution();
         c.run();
     }
 }
